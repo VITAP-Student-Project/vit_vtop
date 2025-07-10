@@ -19,7 +19,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  vit_vtop: ^0.0.1
+  vit_vtop:
     git:
       url:https://github.com/VITAP-Student-Project/vit_vtop.git
 ```
@@ -133,53 +133,6 @@ final wifiResult = await fetchWifi(
 final hostelReport = await fetchHostelReport(client: client);
 ```
 
-## Data Models
-
-The package provides several data models for working with VTOP data:
-
-### AttendanceRecord
-```dart
-class AttendanceRecord {
-  final String courseName;
-  final String courseCode;
-  final String attendancePercentage;
-  final String classesAttended;
-  final String totalClasses;
-  // ... other properties
-}
-```
-
-### SemesterInfo
-```dart
-class SemesterInfo {
-  final String id;
-  final String name;
-}
-```
-
-### TimetableSlot
-```dart
-class TimetableSlot {
-  final String day;
-  final String slot;
-  final String courseCode;
-  final String roomNo;
-  final String startTime;
-  final String endTime;
-  // ... other properties
-}
-```
-
-### MarksRecord
-```dart
-class MarksRecord {
-  final String coursecode;
-  final String coursetitle;
-  final List<MarksRecordEach> marks;
-  // ... other properties
-}
-```
-
 ## Error Handling
 
 The package uses Rust's error handling, which is exposed as Dart exceptions:
@@ -229,16 +182,17 @@ flutter run
 ## Development
 
 ### Building from Source
+Fork the repository.
 
 ```bash
-# Clone the repository
+# Clone your fork
 git clone <repository-url>
 cd vit_vtop
 
 # Get dependencies
 flutter pub get
 
-# Generate bindings (if needed)
+# Generate bindings
 flutter_rust_bridge_codegen generate
 
 # Run tests
