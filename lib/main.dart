@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rust_bridge/rust_bridge.dart';
+import 'package:vit_vtop/vit_vtop.dart';
 
 Future<void> main() async {
   await RustLib.init();

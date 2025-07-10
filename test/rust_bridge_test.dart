@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rust_bridge/rust_bridge.dart';
+import 'package:vit_vtop/vit_vtop.dart';
 
 void main() {
   group('VTOP Flutter Bridge Tests', () {

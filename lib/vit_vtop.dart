@@ -2,7 +2,7 @@
 ///
 /// This package allows you to interact with the VTOP system for various academic operations
 /// including attendance management, timetable access, marks retrieval, and more.
-library rust_bridge;
+library;
 
 // Core exports
 export 'src/rust/frb_generated.dart' show RustLib;
