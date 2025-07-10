@@ -7,24 +7,6 @@ void main() {
       // Initialize the Rust library for tests
       await RustLib.init();
     });
-
-    group('Basic Functionality', () {
-      test('greet function works correctly', () {
-        final result = greet(name: 'Test User');
-        expect(result, equals('Hello, Test User!'));
-      });
-
-      test('greet function handles empty string', () {
-        final result = greet(name: '');
-        expect(result, equals('Hello, !'));
-      });
-
-      test('greet function handles special characters', () {
-        final result = greet(name: 'José María');
-        expect(result, equals('Hello, José María!'));
-      });
-    });
-
     group('VTOP Client Creation', () {
       test('can create VTOP client with credentials', () {
         expect(() {
