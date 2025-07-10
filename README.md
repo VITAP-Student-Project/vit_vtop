@@ -1,4 +1,4 @@
-# VTOP Flutter Bridge
+# VIT_VTOP
 
 A Flutter package that provides Dart bindings for the VTOP (VIT Academic Portal) library using flutter_rust_bridge.
 
@@ -19,7 +19,9 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  rust_bridge: ^0.0.1
+  vit_vtop: ^0.0.1
+    git:
+      url:https://github.com/VITAP-Student-Project/vit_vtop.git
 ```
 
 Then run:
@@ -33,7 +35,7 @@ flutter pub get
 ### Basic Setup
 
 ```dart
-import 'package:rust_bridge/rust_bridge.dart';
+import 'package:vit_vtop/vit_vtop.dart';
 
 void main() async {
   // Initialize the Rust library
@@ -231,7 +233,7 @@ flutter run
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd rust_bridge
+cd vit_vtop
 
 # Get dependencies
 flutter pub get
