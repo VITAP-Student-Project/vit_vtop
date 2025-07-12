@@ -27,6 +27,7 @@ tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
 urlencoding = "2"
 chrono = "0.4.41"
 env_logger = "0.10"
+dotenv = "0.15"
 
 [dev-dependencies]
 tokio-test = "0.4"

@@ -1,6 +1,7 @@
 use crate::api::vtop::{
     types::{
-        AttendanceData, BiometricData, BiometricRecord, ExamScheduleData, FacultyDetails, FullAttendanceData, GetFaculty, MarksData, SemesterData, TimetableData, HostelOutingData, HostelLeaveData
+        AttendanceData, BiometricData, ExamScheduleData, FacultyDetails, FullAttendanceData,
+        GetFaculty, HostelLeaveData, HostelOutingData, MarksData, SemesterData, TimetableData,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -20,6 +21,7 @@ pub async fn vtop_client_login(client: &mut VtopClient) -> Result<(), VtopError>
 pub async fn fetch_semesters(client: &mut VtopClient) -> Result<SemesterData, VtopError> {
     client.get_semesters().await
 }
+
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_attendance(
     client: &mut VtopClient,
@@ -88,7 +90,6 @@ pub async fn fetch_biometric_data(
     client.get_biometric_data(date).await
 }
 
-
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_faculty_search(
     client: &mut VtopClient,
@@ -106,9 +107,7 @@ pub async fn fetch_faculty_data(
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_hostel_report(
-    client: &mut VtopClient,
-) -> Result<HostelOutingData, VtopError> {
+pub async fn fetch_hostel_report(client: &mut VtopClient) -> Result<HostelOutingData, VtopError> {
     client.get_hostel_report().await
 }
 
@@ -129,13 +128,19 @@ pub async fn submit_hostel_outing_form(
     out_place: String,
     out_time: String,
 ) -> Result<String, VtopError> {
-    client.submit_outing_form(purpose_of_visit, outing_date, contact_number, out_place, out_time).await
+    client
+        .submit_outing_form(
+            purpose_of_visit,
+            outing_date,
+            contact_number,
+            out_place,
+            out_time,
+        )
+        .await
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn leave_report(
-    client: &mut VtopClient,
-) -> Result<HostelLeaveData, VtopError> {
+pub async fn leave_report(client: &mut VtopClient) -> Result<HostelLeaveData, VtopError> {
     client.get_hostel_leave_report().await
 }
 
