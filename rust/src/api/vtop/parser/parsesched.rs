@@ -1,8 +1,7 @@
 use super::super::types::*;
 use scraper::{Html, Selector};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-pub fn parse_schedule(html: String, sem: String) -> ExamScheduleData {
+pub fn parse_schedule(html: String) -> Vec<PerExamScheduleRecord> {
     let document = Html::parse_document(&html);
     let rows_selector = Selector::parse("tr").unwrap();
     let mut exams: Vec<PerExamScheduleRecord> = Vec::new();
@@ -121,12 +120,5 @@ pub fn parse_schedule(html: String, sem: String) -> ExamScheduleData {
             exams[off_set as usize].records.push(course);
         }
     }
-    ExamScheduleData {
-        exams: exams,
-        semester_id: sem,
-        update_time: SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or(Duration::new(1, 0))
-            .as_secs(),
-    }
+    exams
 }

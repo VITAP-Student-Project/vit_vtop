@@ -1,10 +1,6 @@
 use crate::api::vtop::{parser, types};
 
-pub use super::parser::*;
 pub use super::session_manager::SessionManager;
-pub use super::types::AttendanceData;
-pub use super::types::ExamScheduleData;
-pub use super::types::FullAttendanceData;
 pub use super::types::*;
 pub use super::vtop_config::VtopConfig;
 pub use super::vtop_errors::VtopError;
@@ -18,7 +14,6 @@ use reqwest::{
     multipart, Client, Url,
 };
 
-use crate::api::vtop;
 use scraper::{Html, Selector};
 use serde::Serialize;
 use std::sync::Arc;
@@ -91,8 +86,12 @@ impl VtopClient {
         }
         let url = format!(
             "{}/vtop/hostel/downloadLeavePass/{}?authorizedID={}&_csrf={}&x={}",
-            self.config.base_url, leave_id, self.username,
-            self.session.get_csrf_token().ok_or(VtopError::SessionExpired)?,
+            self.config.base_url,
+            leave_id,
+            self.username,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
             chrono::Utc::now().to_rfc2822()
         );
 
@@ -152,8 +151,12 @@ impl VtopClient {
         }
         let url = format!(
             "{}/vtop/hostel/downloadOutingForm/{}?authorizedID={}&_csrf={}&x={}",
-            self.config.base_url, booking_id, self.username,
-            self.session.get_csrf_token().ok_or(VtopError::SessionExpired)?,
+            self.config.base_url,
+            booking_id,
+            self.username,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
             chrono::Utc::now().to_rfc2822()
         );
 
@@ -173,7 +176,7 @@ impl VtopClient {
         Ok(bytes.to_vec())
     }
 
-    // Submit Outing form 
+    // Submit Outing form
     pub async fn submit_outing_form(
         &mut self,
         purpose_of_visit: String,
@@ -186,9 +189,14 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let url = format!("{}/vtop/hostel/saveOutingForm", self.config.base_url);
-        
+
         let form = multipart::Form::new()
-            .text("_csrf", self.session.get_csrf_token().ok_or(VtopError::SessionExpired)?)
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            )
             .text("authorizedID", self.username.clone())
             .text("regNo", self.username.clone())
             .text("name", "") // This might need to be dynamic
@@ -298,7 +306,10 @@ impl VtopClient {
         Ok(faculty_details)
     }
 
-    pub async fn get_biometric_data(&mut self, date: String) -> VtopResult<BiometricData> {
+    pub async fn get_biometric_data(
+        &mut self,
+        date: String,
+    ) -> VtopResult<Vec<types::BiometricRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -329,7 +340,7 @@ impl VtopClient {
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         // Using println! instead of print! for better formatting
 
-        Ok(parsebiometric::parse_biometric_data(text, date))
+        Ok(parser::parsebiometric::parse_biometric_data(text))
     }
 
     pub async fn get_semesters(&mut self) -> VtopResult<SemesterData> {
@@ -361,10 +372,10 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parsett::parse_semid_timetable(text))
+        Ok(parser::parsett::parse_semid_timetable(text))
     }
 
-    pub async fn get_timetable(&mut self, semester_id: &str) -> VtopResult<TimetableData> {
+    pub async fn get_timetable(&mut self, semester_id: &str) -> VtopResult<Vec<TimetableSlot>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -389,10 +400,10 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parsett::parse_timetable(text, semester_id))
+        Ok(parser::parsett::parse_timetable(text))
     }
 
-    pub async fn get_attendance(&mut self, semester_id: &str) -> VtopResult<AttendanceData> {
+    pub async fn get_attendance(&mut self, semester_id: &str) -> VtopResult<Vec<AttendanceRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -417,15 +428,15 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         };
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parseattn::parse_attendance(text, semester_id.to_string()))
+        Ok(parser::parseattn::parse_attendance(text))
     }
 
-    pub async fn get_full_attendance(
+    pub async fn get_attendance_detail(
         &mut self,
         semester_id: &str,
         course_id: &str,
         course_type: &str,
-    ) -> VtopResult<FullAttendanceData> {
+    ) -> VtopResult<Vec<AttendanceDetailRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -453,15 +464,10 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parseattn::parse_full_attendance(
-            text,
-            semester_id.to_string(),
-            course_id.into(),
-            course_type.into(),
-        ))
+        Ok(parser::parseattn::parse_full_attendance(text))
     }
 
-    pub async fn get_marks(&mut self, semester_id: &str) -> VtopResult<MarksData> {
+    pub async fn get_marks(&mut self, semester_id: &str) -> VtopResult<Vec<MarksRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -493,10 +499,13 @@ impl VtopClient {
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
 
-        Ok(parsemarks::parse_marks(text, semester_id.to_string()))
+        Ok(parser::parsemarks::parse_marks(text))
     }
 
-    pub async fn get_exam_schedule(&mut self, semester_id: &str) -> VtopResult<ExamScheduleData> {
+    pub async fn get_exam_schedule(
+        &mut self,
+        semester_id: &str,
+    ) -> VtopResult<Vec<PerExamScheduleRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -525,7 +534,7 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parsesched::parse_schedule(text, semester_id.to_string()))
+        Ok(parser::parsesched::parse_schedule(text))
     }
     pub fn is_authenticated(&mut self) -> bool {
         self.session.is_authenticated()

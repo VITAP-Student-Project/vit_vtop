@@ -4,14 +4,9 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../../frb_generated.dart';
-import '../types.dart';
+import '../types/exam_schedule.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<ExamScheduleData> parseSchedule({
-  required String html,
-  required String sem,
-}) => RustLib.instance.api.crateApiVtopParserParseschedParseSchedule(
-  html: html,
-  sem: sem,
-);
+Future<List<PerExamScheduleRecord>> parseSchedule({required String html}) =>
+    RustLib.instance.api.crateApiVtopParserParseschedParseSchedule(html: html);

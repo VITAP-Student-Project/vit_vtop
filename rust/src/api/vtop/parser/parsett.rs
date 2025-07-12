@@ -6,7 +6,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use super::super::types::*;
 
-pub fn parse_timetable(html: String, sem: &str) -> TimetableData {
+pub fn parse_timetable(html: String) -> Vec<TimetableSlot> {
     #[derive(serde::Serialize, Deserialize)]
     struct Timeing {
         serial: String,
@@ -141,14 +141,7 @@ pub fn parse_timetable(html: String, sem: &str) -> TimetableData {
             }
         }
     } else {
-        return TimetableData {
-            slots: timetables,
-            semester_id: sem.to_string(),
-            update_time: SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .unwrap_or(Duration::new(1, 0))
-                .as_secs(),
-        };
+        return timetables;
     }
     for timetable in &mut timetables {
         if let Some(times) = timeings_temp.iter().find(|t| t.serial == timetable.serial) {
@@ -157,14 +150,7 @@ pub fn parse_timetable(html: String, sem: &str) -> TimetableData {
         }
     }
 
-    TimetableData {
-        slots: timetables,
-        semester_id: sem.to_string(),
-        update_time: SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or(Duration::new(1, 0))
-            .as_secs(),
-    }
+    timetables
 }
 pub fn parse_semid_timetable(html: String) -> SemesterData {
     let mut sem_names_ids = vec![];

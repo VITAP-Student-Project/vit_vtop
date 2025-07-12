@@ -1,7 +1,8 @@
 use crate::api::vtop::{
     types::{
-        AttendanceData, BiometricData, ExamScheduleData, FacultyDetails, FullAttendanceData,
-        GetFaculty, HostelLeaveData, HostelOutingData, MarksData, SemesterData, TimetableData,
+        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty,
+        HostelLeaveData, HostelOutingData, MarksRecord, PerExamScheduleRecord, SemesterData,
+        TimetableSlot,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -26,19 +27,19 @@ pub async fn fetch_semesters(client: &mut VtopClient) -> Result<SemesterData, Vt
 pub async fn fetch_attendance(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<AttendanceData, VtopError> {
+) -> Result<Vec<AttendanceRecord>, VtopError> {
     client.get_attendance(&semester_id).await
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_full_attendance(
+pub async fn fetch_attendance_detail(
     client: &mut VtopClient,
     semester_id: String,
     course_id: String,
     course_type: String,
-) -> Result<FullAttendanceData, VtopError> {
+) -> Result<Vec<AttendanceDetailRecord>, VtopError> {
     client
-        .get_full_attendance(&semester_id, &course_id, &course_type)
+        .get_attendance_detail(&semester_id, &course_id, &course_type)
         .await
 }
 
@@ -46,7 +47,7 @@ pub async fn fetch_full_attendance(
 pub async fn fetch_timetable(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<TimetableData, VtopError> {
+) -> Result<Vec<TimetableSlot>, VtopError> {
     client.get_timetable(&semester_id).await
 }
 
@@ -54,7 +55,7 @@ pub async fn fetch_timetable(
 pub async fn fetch_marks(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<MarksData, VtopError> {
+) -> Result<Vec<MarksRecord>, VtopError> {
     client.get_marks(&semester_id).await
 }
 
@@ -62,7 +63,7 @@ pub async fn fetch_marks(
 pub async fn fetch_exam_shedule(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<ExamScheduleData, VtopError> {
+) -> Result<Vec<PerExamScheduleRecord>, VtopError> {
     client.get_exam_schedule(&semester_id).await
 }
 
@@ -79,14 +80,14 @@ pub async fn fetch_is_auth(client: &mut VtopClient) -> bool {
 
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_wifi(username: String, password: String, i: i32) -> (bool, String) {
-    wifi_login_logout(i, username, password).await
+    university_wifi_login_logout(i, username, password).await
 }
 
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_biometric_data(
     client: &mut VtopClient,
     date: String,
-) -> Result<BiometricData, VtopError> {
+) -> Result<Vec<BiometricRecord>, VtopError> {
     client.get_biometric_data(date).await
 }
 

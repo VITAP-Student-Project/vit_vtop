@@ -4,26 +4,15 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../../frb_generated.dart';
-import '../types.dart';
+import '../types/attendance.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<AttendanceData> parseAttendance({
-  required String html,
-  required String sem,
-}) => RustLib.instance.api.crateApiVtopParserParseattnParseAttendance(
-  html: html,
-  sem: sem,
-);
+Future<List<AttendanceRecord>> parseAttendance({required String html}) =>
+    RustLib.instance.api.crateApiVtopParserParseattnParseAttendance(html: html);
 
-Future<FullAttendanceData> parseFullAttendance({
+Future<List<AttendanceDetailRecord>> parseFullAttendance({
   required String html,
-  required String sem,
-  required String courseId,
-  required String courseType,
 }) => RustLib.instance.api.crateApiVtopParserParseattnParseFullAttendance(
   html: html,
-  sem: sem,
-  courseId: courseId,
-  courseType: courseType,
 );

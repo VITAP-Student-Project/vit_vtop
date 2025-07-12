@@ -1,8 +1,7 @@
 use super::super::types::*;
 use scraper::{ElementRef, Html, Selector};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-pub fn parse_marks(html: String, sem: String) -> MarksData {
+pub fn parse_marks(html: String) -> Vec<MarksRecord> {
     let document = Html::parse_document(&html);
     let mut courses: Vec<MarksRecord> = Vec::new();
 
@@ -109,12 +108,5 @@ pub fn parse_marks(html: String, sem: String) -> MarksData {
 
         bmarks = !bmarks
     }
-    MarksData {
-        records: courses,
-        semester_id: sem,
-        update_time: SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or(Duration::new(1, 0))
-            .as_secs(),
-    }
+    courses
 }

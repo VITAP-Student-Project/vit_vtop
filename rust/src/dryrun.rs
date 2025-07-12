@@ -44,6 +44,10 @@ async fn main() {
             Ok(_) => println!("✅ VTOP login successful"),
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
+        match api::vtop_get_client::fetch_attendance(&mut client, "AP2024258".to_string()).await {
+            Ok(result) => println!("Attendance: {:?}", result),
+            Err(e) => println!("❌ VTOP login failed: {:?}", e),
+        }
     } else {
         println!("ℹ️  No real credentials provided. Use VTOP_USERNAME and VTOP_PASSWORD env vars for real testing.");
     }

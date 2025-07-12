@@ -4,17 +4,13 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../../frb_generated.dart';
-import '../types.dart';
+import '../types/semester.dart';
+import '../types/timetable.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<TimetableData> parseTimetable({
-  required String html,
-  required String sem,
-}) => RustLib.instance.api.crateApiVtopParserParsettParseTimetable(
-  html: html,
-  sem: sem,
-);
+Future<List<TimetableSlot>> parseTimetable({required String html}) =>
+    RustLib.instance.api.crateApiVtopParserParsettParseTimetable(html: html);
 
 Future<SemesterData> parseSemidTimetable({required String html}) => RustLib
     .instance

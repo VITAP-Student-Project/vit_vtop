@@ -6,7 +6,14 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
-import 'vtop/types.dart';
+import 'vtop/types/attendance.dart';
+import 'vtop/types/biometric.dart';
+import 'vtop/types/exam_schedule.dart';
+import 'vtop/types/faculty.dart';
+import 'vtop/types/hostel.dart';
+import 'vtop/types/marks.dart';
+import 'vtop/types/semester.dart';
+import 'vtop/types/timetable.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
@@ -24,7 +31,7 @@ Future<void> vtopClientLogin({required VtopClient client}) =>
 Future<SemesterData> fetchSemesters({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchSemesters(client: client);
 
-Future<AttendanceData> fetchAttendance({
+Future<List<AttendanceRecord>> fetchAttendance({
   required VtopClient client,
   required String semesterId,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
@@ -32,19 +39,19 @@ Future<AttendanceData> fetchAttendance({
   semesterId: semesterId,
 );
 
-Future<FullAttendanceData> fetchFullAttendance({
+Future<List<AttendanceDetailRecord>> fetchAttendanceDetail({
   required VtopClient client,
   required String semesterId,
   required String courseId,
   required String courseType,
-}) => RustLib.instance.api.crateApiVtopGetClientFetchFullAttendance(
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAttendanceDetail(
   client: client,
   semesterId: semesterId,
   courseId: courseId,
   courseType: courseType,
 );
 
-Future<TimetableData> fetchTimetable({
+Future<List<TimetableSlot>> fetchTimetable({
   required VtopClient client,
   required String semesterId,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
@@ -52,7 +59,7 @@ Future<TimetableData> fetchTimetable({
   semesterId: semesterId,
 );
 
-Future<MarksData> fetchMarks({
+Future<List<MarksRecord>> fetchMarks({
   required VtopClient client,
   required String semesterId,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchMarks(
@@ -60,7 +67,7 @@ Future<MarksData> fetchMarks({
   semesterId: semesterId,
 );
 
-Future<ExamScheduleData> fetchExamShedule({
+Future<List<PerExamScheduleRecord>> fetchExamShedule({
   required VtopClient client,
   required String semesterId,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchExamShedule(
@@ -84,7 +91,7 @@ Future<(bool, String)> fetchWifi({
   i: i,
 );
 
-Future<BiometricData> fetchBiometricData({
+Future<List<BiometricRecord>> fetchBiometricData({
   required VtopClient client,
   required String date,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchBiometricData(

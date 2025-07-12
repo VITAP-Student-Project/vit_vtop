@@ -8,11 +8,11 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `get_em`, `parse_initil_page`
 
-Future<(bool, String)> wifiLoginLogout({
+Future<(bool, String)> universityWifiLoginLogout({
   required int i,
   required String username,
   required String password,
-}) => RustLib.instance.api.crateApiVtopWifiWifiLoginLogout(
+}) => RustLib.instance.api.crateApiVtopWifiUniversityWifiLoginLogout(
   i: i,
   username: username,
   password: password,
