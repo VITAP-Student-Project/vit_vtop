@@ -219,12 +219,6 @@ flutter_rust_bridge_codegen generate --watch
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-- Built with [flutter_rust_bridge](https://pub.dev/packages/flutter_rust_bridge)
-- VTOP system by VIT University
-- Rust backend library by VITAP Student Project
-
 ## Support
 
 For issues and questions:
