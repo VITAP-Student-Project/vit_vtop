@@ -49,7 +49,7 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
             continue;
         }
         let row_selector = Selector::parse("tr.tableContent").unwrap();
-        for row in table.select(&row_selector) {
+        let row_selector = Selector::parse("tr.tableContent").unwrap();
         // Course table column indices
         const COURSE_CODE_COL: usize = 1;
         const COURSE_TITLE_COL: usize = 2;
@@ -113,7 +113,6 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
                     course_distribution,
                 });
             }
-        }
         }
     }
 
