@@ -42,7 +42,10 @@ pub fn parse_student_profile(html: String) -> StudentProfileAllView {
     if let Some(img) = doc.select(&img_selector).next() {
         if let Some(src) = img.value().attr("src") {
             if let Some(idx) = src.find("base64,") {
-                base64_pfp = src[idx + 7..].to_string();
+                let start = idx + 7;
+                if start < src.len() {
+                    base64_pfp = src[start..].to_string();
+                }
             }
         }
     }
