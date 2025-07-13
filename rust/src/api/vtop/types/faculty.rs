@@ -13,6 +13,7 @@ pub struct GetFaculty {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct FacultyDetails {
     pub name: String,
@@ -26,6 +27,7 @@ pub struct FacultyDetails {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct OfficeHour {
     pub day: String,

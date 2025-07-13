@@ -24,6 +24,9 @@ sealed class MarksRecord with _$MarksRecord {
     required String slot,
     required List<MarksRecordEach> marks,
   }) = _MarksRecord;
+
+  factory MarksRecord.fromJson(Map<String, dynamic> json) =>
+      _$MarksRecordFromJson(json);
 }
 
 @freezed

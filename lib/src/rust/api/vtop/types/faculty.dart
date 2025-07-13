@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'package:meta/meta.dart' as meta;
 part 'faculty.freezed.dart';
+part 'faculty.g.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`
 
@@ -23,6 +24,9 @@ sealed class FacultyDetails with _$FacultyDetails {
     required String cabinNumber,
     required List<OfficeHour> officeHours,
   }) = _FacultyDetails;
+
+  factory FacultyDetails.fromJson(Map<String, dynamic> json) =>
+      _$FacultyDetailsFromJson(json);
 }
 
 @freezed
@@ -41,4 +45,7 @@ sealed class GetFaculty with _$GetFaculty {
 sealed class OfficeHour with _$OfficeHour {
   const factory OfficeHour({required String day, required String timings}) =
       _OfficeHour;
+
+  factory OfficeHour.fromJson(Map<String, dynamic> json) =>
+      _$OfficeHourFromJson(json);
 }

@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'package:meta/meta.dart' as meta;
 part 'hostel.freezed.dart';
+part 'hostel.g.dart';
 
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `OutingFormData`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
@@ -19,6 +20,9 @@ sealed class HostelLeaveData with _$HostelLeaveData {
     required List<LeaveRecord> records,
     required BigInt updateTime,
   }) = _HostelLeaveData;
+
+  factory HostelLeaveData.fromJson(Map<String, dynamic> json) =>
+      _$HostelLeaveDataFromJson(json);
 }
 
 @freezed
@@ -28,6 +32,9 @@ sealed class HostelOutingData with _$HostelOutingData {
     required List<OutingRecord> records,
     required BigInt updateTime,
   }) = _HostelOutingData;
+
+  factory HostelOutingData.fromJson(Map<String, dynamic> json) =>
+      _$HostelOutingDataFromJson(json);
 }
 
 @freezed
@@ -46,6 +53,9 @@ sealed class LeaveRecord with _$LeaveRecord {
     required bool canDownload,
     required String leaveId,
   }) = _LeaveRecord;
+
+  factory LeaveRecord.fromJson(Map<String, dynamic> json) =>
+      _$LeaveRecordFromJson(json);
 }
 
 @freezed
@@ -66,4 +76,7 @@ sealed class OutingRecord with _$OutingRecord {
     required String status,
     required bool canDownload,
   }) = _OutingRecord;
+
+  factory OutingRecord.fromJson(Map<String, dynamic> json) =>
+      _$OutingRecordFromJson(json);
 }

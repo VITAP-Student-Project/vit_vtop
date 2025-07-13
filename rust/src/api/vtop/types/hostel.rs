@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct OutingRecord {
     pub serial: String,
@@ -22,6 +23,7 @@ pub struct OutingRecord {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct HostelOutingData {
     pub records: Vec<OutingRecord>,
@@ -30,6 +32,7 @@ pub struct HostelOutingData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct OutingFormData {
     pub purpose_of_visit: String,
@@ -42,6 +45,7 @@ pub struct OutingFormData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct LeaveRecord {
     pub serial: String,
@@ -59,6 +63,7 @@ pub struct LeaveRecord {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct HostelLeaveData {
     pub records: Vec<LeaveRecord>,

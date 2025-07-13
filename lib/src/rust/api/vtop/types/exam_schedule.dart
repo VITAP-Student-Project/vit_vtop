@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'package:meta/meta.dart' as meta;
 part 'exam_schedule.freezed.dart';
+part 'exam_schedule.g.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`, `fmt`
 
@@ -29,6 +30,9 @@ sealed class ExamScheduleRecord with _$ExamScheduleRecord {
     required String seatLocation,
     required String seatNo,
   }) = _ExamScheduleRecord;
+
+  factory ExamScheduleRecord.fromJson(Map<String, dynamic> json) =>
+      _$ExamScheduleRecordFromJson(json);
 }
 
 @freezed
@@ -38,4 +42,7 @@ sealed class PerExamScheduleRecord with _$PerExamScheduleRecord {
     required List<ExamScheduleRecord> records,
     required String examType,
   }) = _PerExamScheduleRecord;
+
+  factory PerExamScheduleRecord.fromJson(Map<String, dynamic> json) =>
+      _$PerExamScheduleRecordFromJson(json);
 }

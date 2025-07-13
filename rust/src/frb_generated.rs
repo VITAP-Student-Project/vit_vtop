@@ -3778,7 +3778,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
         let mut var_classesAttended = <String>::sse_decode(deserializer);
         let mut var_totalClasses = <String>::sse_decode(deserializer);
         let mut var_attendancePercentage = <String>::sse_decode(deserializer);
-        let mut var_attendenceFatCat = <String>::sse_decode(deserializer);
+        let mut var_attendanceFatCat = <String>::sse_decode(deserializer);
         let mut var_debarStatus = <String>::sse_decode(deserializer);
         let mut var_courseId = <String>::sse_decode(deserializer);
         return crate::api::vtop::types::attendance::AttendanceRecord {
@@ -3791,7 +3791,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
             classes_attended: var_classesAttended,
             total_classes: var_totalClasses,
             attendance_percentage: var_attendancePercentage,
-            attendence_fat_cat: var_attendenceFatCat,
+            attendence_fat_cat: var_attendanceFatCat,
             debar_status: var_debarStatus,
             course_id: var_courseId,
         };

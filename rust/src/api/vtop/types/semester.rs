@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct SemesterInfo {
     pub id: String,
@@ -11,6 +12,7 @@ pub struct SemesterInfo {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
+#[frb(json_serializable)]
 #[frb]
 pub struct SemesterData {
     pub semesters: Vec<SemesterInfo>,

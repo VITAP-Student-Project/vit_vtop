@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'package:meta/meta.dart' as meta;
 part 'attendance.freezed.dart';
+part 'attendance.g.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`, `fmt`
 
@@ -22,12 +23,11 @@ sealed class AttendanceDetailRecord with _$AttendanceDetailRecord {
     required String status,
     required String remark,
   }) = _AttendanceDetailRecord;
+
+  factory AttendanceDetailRecord.fromJson(Map<String, dynamic> json) =>
+      _$AttendanceDetailRecordFromJson(json);
 }
 
-/// AttendanceRecord -> This is a basic single attendance data row that you see in attendance page
-/// AttendanceData -> This is a list of AttendanceRecord(s)
-/// AttendanceDetailRecord -> This is the more detailed attendance data that you see when the eye icon is pressed
-/// AttendanceDetail -> This is a list of AttendanceDetailRecord(s)
 @freezed
 @meta.immutable
 sealed class AttendanceRecord with _$AttendanceRecord {
@@ -41,8 +41,11 @@ sealed class AttendanceRecord with _$AttendanceRecord {
     required String classesAttended,
     required String totalClasses,
     required String attendancePercentage,
-    required String attendenceFatCat,
+    required String attendanceFatCat,
     required String debarStatus,
     required String courseId,
   }) = _AttendanceRecord;
+
+  factory AttendanceRecord.fromJson(Map<String, dynamic> json) =>
+      _$AttendanceRecordFromJson(json);
 }

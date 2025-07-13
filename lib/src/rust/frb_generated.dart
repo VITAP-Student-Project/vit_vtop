@@ -3411,7 +3411,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       classesAttended: dco_decode_String(arr[6]),
       totalClasses: dco_decode_String(arr[7]),
       attendancePercentage: dco_decode_String(arr[8]),
-      attendenceFatCat: dco_decode_String(arr[9]),
+      attendanceFatCat: dco_decode_String(arr[9]),
       debarStatus: dco_decode_String(arr[10]),
       courseId: dco_decode_String(arr[11]),
     );
@@ -4365,7 +4365,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_classesAttended = sse_decode_String(deserializer);
     var var_totalClasses = sse_decode_String(deserializer);
     var var_attendancePercentage = sse_decode_String(deserializer);
-    var var_attendenceFatCat = sse_decode_String(deserializer);
+    var var_attendanceFatCat = sse_decode_String(deserializer);
     var var_debarStatus = sse_decode_String(deserializer);
     var var_courseId = sse_decode_String(deserializer);
     return AttendanceRecord(
@@ -4378,7 +4378,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       classesAttended: var_classesAttended,
       totalClasses: var_totalClasses,
       attendancePercentage: var_attendancePercentage,
-      attendenceFatCat: var_attendenceFatCat,
+      attendanceFatCat: var_attendanceFatCat,
       debarStatus: var_debarStatus,
       courseId: var_courseId,
     );
@@ -5506,7 +5506,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.classesAttended, serializer);
     sse_encode_String(self.totalClasses, serializer);
     sse_encode_String(self.attendancePercentage, serializer);
-    sse_encode_String(self.attendenceFatCat, serializer);
+    sse_encode_String(self.attendanceFatCat, serializer);
     sse_encode_String(self.debarStatus, serializer);
     sse_encode_String(self.courseId, serializer);
   }

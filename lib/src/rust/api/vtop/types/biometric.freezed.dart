@@ -11,6 +11,7 @@ part of 'biometric.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$BiometricRecord {
 
@@ -21,6 +22,8 @@ mixin _$BiometricRecord {
 @pragma('vm:prefer-inline')
 $BiometricRecordCopyWith<BiometricRecord> get copyWith => _$BiometricRecordCopyWithImpl<BiometricRecord>(this as BiometricRecord, _$identity);
 
+  /// Serializes this BiometricRecord to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -28,7 +31,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is BiometricRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.date, date) || other.date == date)&&(identical(other.day, day) || other.day == day)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.location, location) || other.location == location));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,date,day,inTime,outTime,duration,location);
 
@@ -203,11 +206,11 @@ return $default(_that.serial,_that.date,_that.day,_that.inTime,_that.outTime,_th
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _BiometricRecord implements BiometricRecord {
   const _BiometricRecord({required this.serial, required this.date, required this.day, required this.inTime, required this.outTime, required this.duration, required this.location});
-  
+  factory _BiometricRecord.fromJson(Map<String, dynamic> json) => _$BiometricRecordFromJson(json);
 
 @override final  String serial;
 @override final  String date;
@@ -223,14 +226,17 @@ class _BiometricRecord implements BiometricRecord {
 @pragma('vm:prefer-inline')
 _$BiometricRecordCopyWith<_BiometricRecord> get copyWith => __$BiometricRecordCopyWithImpl<_BiometricRecord>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$BiometricRecordToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _BiometricRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.date, date) || other.date == date)&&(identical(other.day, day) || other.day == day)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.location, location) || other.location == location));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,date,day,inTime,outTime,duration,location);
 

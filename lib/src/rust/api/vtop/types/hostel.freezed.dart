@@ -11,6 +11,7 @@ part of 'hostel.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$HostelLeaveData {
 
@@ -21,6 +22,8 @@ mixin _$HostelLeaveData {
 @pragma('vm:prefer-inline')
 $HostelLeaveDataCopyWith<HostelLeaveData> get copyWith => _$HostelLeaveDataCopyWithImpl<HostelLeaveData>(this as HostelLeaveData, _$identity);
 
+  /// Serializes this HostelLeaveData to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -28,7 +31,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is HostelLeaveData&&const DeepCollectionEquality().equals(other.records, records)&&(identical(other.updateTime, updateTime) || other.updateTime == updateTime));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(records),updateTime);
 
@@ -198,11 +201,11 @@ return $default(_that.records,_that.updateTime);case _:
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _HostelLeaveData implements HostelLeaveData {
   const _HostelLeaveData({required final  List<LeaveRecord> records, required this.updateTime}): _records = records;
-  
+  factory _HostelLeaveData.fromJson(Map<String, dynamic> json) => _$HostelLeaveDataFromJson(json);
 
  final  List<LeaveRecord> _records;
 @override List<LeaveRecord> get records {
@@ -219,14 +222,17 @@ class _HostelLeaveData implements HostelLeaveData {
 @pragma('vm:prefer-inline')
 _$HostelLeaveDataCopyWith<_HostelLeaveData> get copyWith => __$HostelLeaveDataCopyWithImpl<_HostelLeaveData>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$HostelLeaveDataToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _HostelLeaveData&&const DeepCollectionEquality().equals(other._records, _records)&&(identical(other.updateTime, updateTime) || other.updateTime == updateTime));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_records),updateTime);
 
@@ -271,6 +277,7 @@ as BigInt,
 
 }
 
+
 /// @nodoc
 mixin _$HostelOutingData {
 
@@ -281,6 +288,8 @@ mixin _$HostelOutingData {
 @pragma('vm:prefer-inline')
 $HostelOutingDataCopyWith<HostelOutingData> get copyWith => _$HostelOutingDataCopyWithImpl<HostelOutingData>(this as HostelOutingData, _$identity);
 
+  /// Serializes this HostelOutingData to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -288,7 +297,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is HostelOutingData&&const DeepCollectionEquality().equals(other.records, records)&&(identical(other.updateTime, updateTime) || other.updateTime == updateTime));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(records),updateTime);
 
@@ -458,11 +467,11 @@ return $default(_that.records,_that.updateTime);case _:
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _HostelOutingData implements HostelOutingData {
   const _HostelOutingData({required final  List<OutingRecord> records, required this.updateTime}): _records = records;
-  
+  factory _HostelOutingData.fromJson(Map<String, dynamic> json) => _$HostelOutingDataFromJson(json);
 
  final  List<OutingRecord> _records;
 @override List<OutingRecord> get records {
@@ -479,14 +488,17 @@ class _HostelOutingData implements HostelOutingData {
 @pragma('vm:prefer-inline')
 _$HostelOutingDataCopyWith<_HostelOutingData> get copyWith => __$HostelOutingDataCopyWithImpl<_HostelOutingData>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$HostelOutingDataToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _HostelOutingData&&const DeepCollectionEquality().equals(other._records, _records)&&(identical(other.updateTime, updateTime) || other.updateTime == updateTime));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_records),updateTime);
 
@@ -531,6 +543,7 @@ as BigInt,
 
 }
 
+
 /// @nodoc
 mixin _$LeaveRecord {
 
@@ -541,6 +554,8 @@ mixin _$LeaveRecord {
 @pragma('vm:prefer-inline')
 $LeaveRecordCopyWith<LeaveRecord> get copyWith => _$LeaveRecordCopyWithImpl<LeaveRecord>(this as LeaveRecord, _$identity);
 
+  /// Serializes this LeaveRecord to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -548,7 +563,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.placeOfVisit, placeOfVisit) || other.placeOfVisit == placeOfVisit)&&(identical(other.purposeOfVisit, purposeOfVisit) || other.purposeOfVisit == purposeOfVisit)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.fromTime, fromTime) || other.fromTime == fromTime)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.toTime, toTime) || other.toTime == toTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.canDownload, canDownload) || other.canDownload == canDownload)&&(identical(other.leaveId, leaveId) || other.leaveId == leaveId));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,registrationNumber,placeOfVisit,purposeOfVisit,fromDate,fromTime,toDate,toTime,status,canDownload,leaveId);
 
@@ -727,11 +742,11 @@ return $default(_that.serial,_that.registrationNumber,_that.placeOfVisit,_that.p
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _LeaveRecord implements LeaveRecord {
   const _LeaveRecord({required this.serial, required this.registrationNumber, required this.placeOfVisit, required this.purposeOfVisit, required this.fromDate, required this.fromTime, required this.toDate, required this.toTime, required this.status, required this.canDownload, required this.leaveId});
-  
+  factory _LeaveRecord.fromJson(Map<String, dynamic> json) => _$LeaveRecordFromJson(json);
 
 @override final  String serial;
 @override final  String registrationNumber;
@@ -751,14 +766,17 @@ class _LeaveRecord implements LeaveRecord {
 @pragma('vm:prefer-inline')
 _$LeaveRecordCopyWith<_LeaveRecord> get copyWith => __$LeaveRecordCopyWithImpl<_LeaveRecord>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$LeaveRecordToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.placeOfVisit, placeOfVisit) || other.placeOfVisit == placeOfVisit)&&(identical(other.purposeOfVisit, purposeOfVisit) || other.purposeOfVisit == purposeOfVisit)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.fromTime, fromTime) || other.fromTime == fromTime)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.toTime, toTime) || other.toTime == toTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.canDownload, canDownload) || other.canDownload == canDownload)&&(identical(other.leaveId, leaveId) || other.leaveId == leaveId));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,registrationNumber,placeOfVisit,purposeOfVisit,fromDate,fromTime,toDate,toTime,status,canDownload,leaveId);
 
@@ -812,6 +830,7 @@ as String,
 
 }
 
+
 /// @nodoc
 mixin _$OutingRecord {
 
@@ -822,6 +841,8 @@ mixin _$OutingRecord {
 @pragma('vm:prefer-inline')
 $OutingRecordCopyWith<OutingRecord> get copyWith => _$OutingRecordCopyWithImpl<OutingRecord>(this as OutingRecord, _$identity);
 
+  /// Serializes this OutingRecord to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -829,7 +850,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is OutingRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.hostelBlock, hostelBlock) || other.hostelBlock == hostelBlock)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.placeOfVisit, placeOfVisit) || other.placeOfVisit == placeOfVisit)&&(identical(other.purposeOfVisit, purposeOfVisit) || other.purposeOfVisit == purposeOfVisit)&&(identical(other.time, time) || other.time == time)&&(identical(other.contactNumber, contactNumber) || other.contactNumber == contactNumber)&&(identical(other.parentContactNumber, parentContactNumber) || other.parentContactNumber == parentContactNumber)&&(identical(other.date, date) || other.date == date)&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.status, status) || other.status == status)&&(identical(other.canDownload, canDownload) || other.canDownload == canDownload));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,registrationNumber,hostelBlock,roomNumber,placeOfVisit,purposeOfVisit,time,contactNumber,parentContactNumber,date,bookingId,status,canDownload);
 
@@ -1010,11 +1031,11 @@ return $default(_that.serial,_that.registrationNumber,_that.hostelBlock,_that.ro
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _OutingRecord implements OutingRecord {
   const _OutingRecord({required this.serial, required this.registrationNumber, required this.hostelBlock, required this.roomNumber, required this.placeOfVisit, required this.purposeOfVisit, required this.time, required this.contactNumber, required this.parentContactNumber, required this.date, required this.bookingId, required this.status, required this.canDownload});
-  
+  factory _OutingRecord.fromJson(Map<String, dynamic> json) => _$OutingRecordFromJson(json);
 
 @override final  String serial;
 @override final  String registrationNumber;
@@ -1036,14 +1057,17 @@ class _OutingRecord implements OutingRecord {
 @pragma('vm:prefer-inline')
 _$OutingRecordCopyWith<_OutingRecord> get copyWith => __$OutingRecordCopyWithImpl<_OutingRecord>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$OutingRecordToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _OutingRecord&&(identical(other.serial, serial) || other.serial == serial)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.hostelBlock, hostelBlock) || other.hostelBlock == hostelBlock)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.placeOfVisit, placeOfVisit) || other.placeOfVisit == placeOfVisit)&&(identical(other.purposeOfVisit, purposeOfVisit) || other.purposeOfVisit == purposeOfVisit)&&(identical(other.time, time) || other.time == time)&&(identical(other.contactNumber, contactNumber) || other.contactNumber == contactNumber)&&(identical(other.parentContactNumber, parentContactNumber) || other.parentContactNumber == parentContactNumber)&&(identical(other.date, date) || other.date == date)&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.status, status) || other.status == status)&&(identical(other.canDownload, canDownload) || other.canDownload == canDownload));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,serial,registrationNumber,hostelBlock,roomNumber,placeOfVisit,purposeOfVisit,time,contactNumber,parentContactNumber,date,bookingId,status,canDownload);
 

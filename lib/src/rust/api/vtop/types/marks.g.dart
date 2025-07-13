@@ -6,6 +6,30 @@ part of 'marks.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_MarksRecord _$MarksRecordFromJson(Map<String, dynamic> json) => _MarksRecord(
+  serial: json['serial'] as String,
+  coursecode: json['coursecode'] as String,
+  coursetitle: json['coursetitle'] as String,
+  coursetype: json['coursetype'] as String,
+  faculity: json['faculity'] as String,
+  slot: json['slot'] as String,
+  marks:
+      (json['marks'] as List<dynamic>)
+          .map((e) => MarksRecordEach.fromJson(e as Map<String, dynamic>))
+          .toList(),
+);
+
+Map<String, dynamic> _$MarksRecordToJson(_MarksRecord instance) =>
+    <String, dynamic>{
+      'serial': instance.serial,
+      'coursecode': instance.coursecode,
+      'coursetitle': instance.coursetitle,
+      'coursetype': instance.coursetype,
+      'faculity': instance.faculity,
+      'slot': instance.slot,
+      'marks': instance.marks,
+    };
+
 _MarksRecordEach _$MarksRecordEachFromJson(Map<String, dynamic> json) =>
     _MarksRecordEach(
       serial: json['serial'] as String,

@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'package:meta/meta.dart' as meta;
 part 'semester.freezed.dart';
+part 'semester.g.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`, `fmt`
 
@@ -18,6 +19,9 @@ sealed class SemesterData with _$SemesterData {
     required List<SemesterInfo> semesters,
     required BigInt updateTime,
   }) = _SemesterData;
+
+  factory SemesterData.fromJson(Map<String, dynamic> json) =>
+      _$SemesterDataFromJson(json);
 }
 
 @freezed
@@ -25,4 +29,7 @@ sealed class SemesterData with _$SemesterData {
 sealed class SemesterInfo with _$SemesterInfo {
   const factory SemesterInfo({required String id, required String name}) =
       _SemesterInfo;
+
+  factory SemesterInfo.fromJson(Map<String, dynamic> json) =>
+      _$SemesterInfoFromJson(json);
 }

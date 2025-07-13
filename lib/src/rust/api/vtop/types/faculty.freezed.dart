@@ -11,6 +11,7 @@ part of 'faculty.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$FacultyDetails {
 
@@ -21,6 +22,8 @@ mixin _$FacultyDetails {
 @pragma('vm:prefer-inline')
 $FacultyDetailsCopyWith<FacultyDetails> get copyWith => _$FacultyDetailsCopyWithImpl<FacultyDetails>(this as FacultyDetails, _$identity);
 
+  /// Serializes this FacultyDetails to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -28,7 +31,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is FacultyDetails&&(identical(other.name, name) || other.name == name)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.department, department) || other.department == department)&&(identical(other.schoolCentre, schoolCentre) || other.schoolCentre == schoolCentre)&&(identical(other.email, email) || other.email == email)&&(identical(other.cabinNumber, cabinNumber) || other.cabinNumber == cabinNumber)&&const DeepCollectionEquality().equals(other.officeHours, officeHours));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,name,designation,department,schoolCentre,email,cabinNumber,const DeepCollectionEquality().hash(officeHours));
 
@@ -203,11 +206,11 @@ return $default(_that.name,_that.designation,_that.department,_that.schoolCentre
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _FacultyDetails implements FacultyDetails {
   const _FacultyDetails({required this.name, required this.designation, required this.department, required this.schoolCentre, required this.email, required this.cabinNumber, required final  List<OfficeHour> officeHours}): _officeHours = officeHours;
-  
+  factory _FacultyDetails.fromJson(Map<String, dynamic> json) => _$FacultyDetailsFromJson(json);
 
 @override final  String name;
 @override final  String designation;
@@ -229,14 +232,17 @@ class _FacultyDetails implements FacultyDetails {
 @pragma('vm:prefer-inline')
 _$FacultyDetailsCopyWith<_FacultyDetails> get copyWith => __$FacultyDetailsCopyWithImpl<_FacultyDetails>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$FacultyDetailsToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _FacultyDetails&&(identical(other.name, name) || other.name == name)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.department, department) || other.department == department)&&(identical(other.schoolCentre, schoolCentre) || other.schoolCentre == schoolCentre)&&(identical(other.email, email) || other.email == email)&&(identical(other.cabinNumber, cabinNumber) || other.cabinNumber == cabinNumber)&&const DeepCollectionEquality().equals(other._officeHours, _officeHours));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,name,designation,department,schoolCentre,email,cabinNumber,const DeepCollectionEquality().hash(_officeHours));
 
@@ -546,6 +552,7 @@ as String,
 
 }
 
+
 /// @nodoc
 mixin _$OfficeHour {
 
@@ -556,6 +563,8 @@ mixin _$OfficeHour {
 @pragma('vm:prefer-inline')
 $OfficeHourCopyWith<OfficeHour> get copyWith => _$OfficeHourCopyWithImpl<OfficeHour>(this as OfficeHour, _$identity);
 
+  /// Serializes this OfficeHour to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -563,7 +572,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is OfficeHour&&(identical(other.day, day) || other.day == day)&&(identical(other.timings, timings) || other.timings == timings));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,day,timings);
 
@@ -733,11 +742,11 @@ return $default(_that.day,_that.timings);case _:
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _OfficeHour implements OfficeHour {
   const _OfficeHour({required this.day, required this.timings});
-  
+  factory _OfficeHour.fromJson(Map<String, dynamic> json) => _$OfficeHourFromJson(json);
 
 @override final  String day;
 @override final  String timings;
@@ -748,14 +757,17 @@ class _OfficeHour implements OfficeHour {
 @pragma('vm:prefer-inline')
 _$OfficeHourCopyWith<_OfficeHour> get copyWith => __$OfficeHourCopyWithImpl<_OfficeHour>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$OfficeHourToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfficeHour&&(identical(other.day, day) || other.day == day)&&(identical(other.timings, timings) || other.timings == timings));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,day,timings);
 
