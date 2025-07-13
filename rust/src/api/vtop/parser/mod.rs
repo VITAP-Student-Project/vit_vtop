@@ -11,3 +11,7 @@ pub mod parsebiometric;
 pub mod faculty;
 
 pub mod hostel;
+pub mod parseprofile;
+pub mod parsegradehistory;
+pub mod parsependingpayments;
+pub mod parsepaymentreceipts;
