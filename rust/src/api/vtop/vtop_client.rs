@@ -47,6 +47,140 @@ impl VtopClient {
         Ok(data)
     }
 
+    pub async  fn get_payment_receipts(
+        &mut self
+    ) -> VtopResult<Vec<PaymentReceipt>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/p2p/getReceiptsApplno", self.config.base_url);
+        let body = format!(
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username
+        );
+
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        if !res.status().is_success() || res.url().to_string().contains("login") {
+            self.session.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+
+        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let receipts: Vec<PaymentReceipt> = parser::parsepaymentreceipts::parse_payment_receipts(text);
+        Ok(receipts)
+    }
+
+    pub async fn get_pending_payment(
+        &mut self
+    ) -> VtopResult<Vec<PendingPayment>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/finance/Payments", self.config.base_url);
+        let body = format!(
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username
+        );
+
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        if !res.status().is_success() || res.url().to_string().contains("login") {
+            self.session.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+
+        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let pending_payment = parser::parsependingpayments::parse_pending_payments(text);
+        Ok(pending_payment)
+    }
+    
+
+
+    pub async fn get_grade_history(
+        &mut self
+    ) -> VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/examinations/examGradeView/StudentGradeHistory", self.config.base_url);
+        let body = format!(
+            "verifyMenu=True&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username
+        );
+
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        if !res.status().is_success() || res.url().to_string().contains("login") {
+            self.session.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+
+        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let grade_history = parser::parsegradehistory::parse_grade_history(text);
+        Ok(grade_history)
+    }
+
+    pub async fn get_student_profile(
+        &mut self,
+    ) -> VtopResult<crate::api::vtop::types::profile::StudentProfileAllView> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/studentsRecord/StudentProfileAllView", self.config.base_url);
+        let body = format!(
+            "_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username
+        );
+
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        if !res.status().is_success() || res.url().to_string().contains("login") {
+            self.session.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+
+        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let profile = crate::api::vtop::parser::parseprofile::parse_student_profile(text);
+        Ok(profile)
+    }
+
     // Hostel Get Leave Report
     pub async fn get_hostel_leave_report(&mut self) -> VtopResult<HostelLeaveData> {
         if !self.session.is_authenticated() {

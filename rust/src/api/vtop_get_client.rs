@@ -1,8 +1,6 @@
 use crate::api::vtop::{
     types::{
-        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty,
-        HostelLeaveData, HostelOutingData, MarksRecord, PerExamScheduleRecord, SemesterData,
-        TimetableSlot,
+        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaymentReceipt, PendingPayment, PerExamScheduleRecord, SemesterData, StudentProfileAllView, TimetableSlot
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -151,4 +149,33 @@ pub async fn leave_report_download(
     leave_id: String,
 ) -> Result<Vec<u8>, VtopError> {
     client.get_hostel_leave_pdf(leave_id).await
+}
+
+#[flutter_rust_bridge::frb()]
+pub async fn student_profile(
+    client: &mut VtopClient,
+) -> Result<StudentProfileAllView, VtopError> {
+    client.get_student_profile().await
+}
+
+#[flutter_rust_bridge::frb()]
+pub async fn student_grade_history(
+    client: &mut VtopClient,
+) -> Result<(GradeHistory, Vec<crate::api::vtop::types::GradeCourseHistory>), VtopError> {
+    client.get_grade_history().await
+}
+
+
+#[flutter_rust_bridge::frb()]
+pub async fn student_pending_payments(
+    client: &mut VtopClient,
+) -> Result<Vec<PendingPayment>, VtopError> {
+    client.get_pending_payment().await
+}
+
+#[flutter_rust_bridge::frb()]
+pub async fn student_payment_receipts(
+    client: &mut VtopClient,
+) -> Result<Vec<PaymentReceipt>, VtopError> {
+    client.get_payment_receipts().await
 }

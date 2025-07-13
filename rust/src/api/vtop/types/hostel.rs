@@ -69,3 +69,4 @@ pub struct HostelLeaveData {
     pub records: Vec<LeaveRecord>,
     pub update_time: u64,
 }
+

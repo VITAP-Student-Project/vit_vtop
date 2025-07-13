@@ -23,6 +23,7 @@ target
 src/main.rs
 main.rs
 
+*.pdf
 *pdf
 
 # Node.js
