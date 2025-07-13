@@ -143,6 +143,16 @@ pub async fn leave_report(client: &mut VtopClient) -> Result<HostelLeaveData, Vt
     client.get_hostel_leave_report().await
 }
 
+/// Downloads the PDF report for a specific hostel leave request.
+///
+/// Returns the PDF file as a byte vector if successful, or a `VtopError` on failure.
+///
+/// # Examples
+///
+/// ```
+/// let pdf_bytes = leave_report_download(&mut client, "LEAVE123".to_string()).await?;
+/// assert!(!pdf_bytes.is_empty());
+/// ```
 #[flutter_rust_bridge::frb()]
 pub async fn leave_report_download(
     client: &mut VtopClient,
@@ -151,13 +161,33 @@ pub async fn leave_report_download(
     client.get_hostel_leave_pdf(leave_id).await
 }
 
-#[flutter_rust_bridge::frb()]
+/// Retrieves the complete student profile for the authenticated user.
+///
+/// Returns a `StudentProfileAllView` containing detailed profile information on success, or a `VtopError` if the operation fails.
+///
+/// # Examples
+///
+/// ```
+/// let mut client = get_vtop_client("username".to_string(), "password".to_string());
+/// let profile = student_profile(&mut client).await.unwrap();
+/// assert_eq!(profile.name, "John Doe");
+/// ```
 pub async fn student_profile(
     client: &mut VtopClient,
 ) -> Result<StudentProfileAllView, VtopError> {
     client.get_student_profile().await
 }
 
+/// Retrieves the student's overall grade history and detailed course-wise grade records.
+///
+/// Returns a tuple containing the student's grade history summary and a list of individual course grade histories.
+///
+/// # Examples
+///
+/// ```
+/// let (grade_history, course_histories) = student_grade_history(&mut client).await.unwrap();
+/// assert!(!course_histories.is_empty());
+/// ```
 #[flutter_rust_bridge::frb()]
 pub async fn student_grade_history(
     client: &mut VtopClient,
@@ -166,14 +196,32 @@ pub async fn student_grade_history(
 }
 
 
-#[flutter_rust_bridge::frb()]
+/// Retrieves a list of pending payments for the student.
+///
+/// Returns a vector of `PendingPayment` records on success, or a `VtopError` if the operation fails.
+///
+/// # Examples
+///
+/// ```
+/// let payments = student_pending_payments(&mut client).await?;
+/// assert!(!payments.is_empty() || payments.is_empty());
+/// ```
 pub async fn student_pending_payments(
     client: &mut VtopClient,
 ) -> Result<Vec<PendingPayment>, VtopError> {
     client.get_pending_payment().await
 }
 
-#[flutter_rust_bridge::frb()]
+/// Retrieves the student's payment receipt records.
+///
+/// Returns a vector of `PaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
+///
+/// # Examples
+///
+/// ```
+/// let receipts = student_payment_receipts(&mut client).await?;
+/// assert!(!receipts.is_empty());
+/// ```
 pub async fn student_payment_receipts(
     client: &mut VtopClient,
 ) -> Result<Vec<PaymentReceipt>, VtopError> {

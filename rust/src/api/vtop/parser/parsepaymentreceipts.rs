@@ -1,6 +1,35 @@
 use crate::api::vtop::types::payments::PaymentReceipt;
 use scraper::{Html, Selector};
 
+/// Parses an HTML string to extract payment receipt information from a table.
+///
+/// Searches for the first table with the class `table table-bordered` in the provided HTML,
+/// then iterates over its rows (excluding the header) to extract receipt details. For each row
+/// with at least five columns, it collects the receipt number, date, amount, campus code, and
+/// attempts to parse the receipt number from a button's `onclick` attribute. Each parsed row
+/// is converted into a `PaymentReceipt` with a fixed payment status of "Paid".
+///
+/// # Returns
+/// A vector of `PaymentReceipt` structs containing the extracted data. Rows missing required
+/// fields or elements are skipped.
+///
+/// # Examples
+///
+/// ```
+/// let html = r#"
+/// <table class="table table-bordered">
+///   <tr><th>Receipt No</th><th>Date</th><th>Amount</th><th>Campus</th><th>Action</th></tr>
+///   <tr>
+///     <td>12345</td><td>2024-01-01</td><td>1000</td><td>ABC</td>
+///     <td><button onclick="javascript:doDuplicateReceipt('12345/2024/ABC');"></button></td>
+///   </tr>
+/// </table>
+/// "#.to_string();
+/// let receipts = parse_payment_receipts(html);
+/// assert_eq!(receipts.len(), 1);
+/// assert_eq!(receipts[0].receipt_number, "12345");
+/// assert_eq!(receipts[0].receipt_no, "12345/2024/ABC");
+/// ```
 pub fn parse_payment_receipts(html: String) -> Vec<PaymentReceipt> {
     let doc = Html::parse_document(&html);
     let mut results = Vec::new();

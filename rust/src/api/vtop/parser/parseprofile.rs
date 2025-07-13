@@ -1,10 +1,39 @@
 use crate::api::vtop::types::profile::{GradeHistory, MentorDetails, StudentProfileAllView};
 use scraper::{Html, Selector};
 
-/// Parse the student profile HTML and return a StudentProfileAllView struct.
+/// Parses a student profile HTML page and returns a `StudentProfileAllView` struct with extracted profile, mentor, and grade history details.
+///
+/// Extracts key student information, mentor (proctor) details, and the base64-encoded profile picture from the provided HTML.
+/// Fields not present in the HTML are set to empty strings or `"N/A"` as appropriate.
+///
+/// # Examples
+///
+/// ```
+/// let html = std::fs::read_to_string("student_profile.html").unwrap();
+/// let profile = parse_student_profile(html);
+/// assert!(!profile.student_name.is_empty());
+/// ```
 pub fn parse_student_profile(html: String) -> StudentProfileAllView {
     let doc = Html::parse_document(&html);
 
+    /// Searches for a table row whose first cell contains the specified label (case-insensitive) and returns the trimmed text of the second cell.
+    ///
+    /// Returns an empty string if no matching row is found.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use scraper::{Html, Selector};
+    /// let html = r#"
+    ///     <table>
+    ///         <tr><td>Student Name</td><td>Jane Doe</td></tr>
+    ///         <tr><td>Email</td><td>jane@example.com</td></tr>
+    ///     </table>
+    /// "#;
+    /// let doc = Html::parse_document(html);
+    /// let value = extract_table_value(&doc, "Student Name");
+    /// assert_eq!(value, "Jane Doe");
+    /// ```
     fn extract_table_value(doc: &Html, label: &str) -> String {
         let selector = Selector::parse("tr").unwrap();
         let td_selector = Selector::parse("td").unwrap();
@@ -22,6 +51,24 @@ pub fn parse_student_profile(html: String) -> StudentProfileAllView {
         "".to_string()
     }
 
+    /// Searches for a table row whose first cell contains the specified label (case-insensitive) and returns the trimmed text of the second cell.
+    ///
+    /// Returns an empty string if no matching row is found.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use scraper::Html;
+    /// let html = r#"
+    ///     <table>
+    ///         <tr><td>Faculty Name</td><td>Dr. Smith</td></tr>
+    ///         <tr><td>Faculty Email</td><td>smith@example.com</td></tr>
+    ///     </table>
+    /// "#;
+    /// let doc = Html::parse_fragment(html);
+    /// let value = extract_table_value_any(&doc, "Faculty Name");
+    /// assert_eq!(value, "Dr. Smith");
+    /// ```
     fn extract_table_value_any(doc: &Html, label: &str) -> String {
         let selector = Selector::parse("tr").unwrap();
         for row in doc.select(&selector) {

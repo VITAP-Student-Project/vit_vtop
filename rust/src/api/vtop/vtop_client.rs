@@ -29,6 +29,19 @@ pub struct VtopClient {
 }
 
 impl VtopClient {
+    /// Retrieves the current session's cookies as a byte vector.
+    ///
+    /// Returns an error if the session is not authenticated.
+    ///
+    /// # Returns
+    /// A vector of bytes representing the session cookies, or an error if the session has expired.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let cookies = client.get_cookie().await?;
+    /// assert!(!cookies.is_empty());
+    /// ```
     #[cfg(not(target_arch = "wasm32"))]
     pub async fn get_cookie(&self) -> VtopResult<Vec<u8>> {
         if !self.session.is_authenticated() {
@@ -47,6 +60,22 @@ impl VtopClient {
         Ok(data)
     }
 
+    /// Retrieves the list of payment receipts for the authenticated user.
+    ///
+    /// Returns a vector of `PaymentReceipt` objects parsed from the VTOP system. If the session is expired or authentication fails, returns a `SessionExpired` error. Network or server errors are also reported as appropriate.
+    ///
+    /// # Returns
+    /// A vector of `PaymentReceipt` on success.
+    ///
+    /// # Errors
+    /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, and `VtopError::VtopServerError` on server response errors.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let receipts = client.get_payment_receipts().await?;
+    /// assert!(!receipts.is_empty());
+    /// ```
     pub async  fn get_payment_receipts(
         &mut self
     ) -> VtopResult<Vec<PaymentReceipt>> {
@@ -80,6 +109,23 @@ impl VtopClient {
         Ok(receipts)
     }
 
+    /// Retrieves the list of pending payments for the authenticated user.
+    ///
+    /// Returns a vector of `PendingPayment` records if the session is valid. If the session has expired or the network/server fails, an appropriate error is returned.
+    ///
+    /// # Returns
+    /// A `VtopResult` containing a vector of `PendingPayment` items on success.
+    ///
+    /// # Errors
+    /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, or `VtopError::VtopServerError` if the server response cannot be parsed.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let mut client = VtopClient::with_config(config, session, username, password);
+    /// let pending = client.get_pending_payment().await?;
+    /// assert!(!pending.is_empty());
+    /// ```
     pub async fn get_pending_payment(
         &mut self
     ) -> VtopResult<Vec<PendingPayment>> {
@@ -115,6 +161,20 @@ impl VtopClient {
     
 
 
+    /// Retrieves the student's grade history and detailed course grade records.
+    ///
+    /// Returns a tuple containing the overall grade history and a list of course-specific grade histories for the authenticated session.
+    ///
+    /// # Errors
+    ///
+    /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, or `VtopError::VtopServerError` if the server response cannot be parsed.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let (history, course_details) = client.get_grade_history().await?;
+    /// assert!(!course_details.is_empty());
+    /// ```
     pub async fn get_grade_history(
         &mut self
     ) -> VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
@@ -148,6 +208,22 @@ impl VtopClient {
         Ok(grade_history)
     }
 
+    /// Retrieves the full student profile for the authenticated user.
+    ///
+    /// Sends a POST request to the VTOP student profile endpoint using the current session's CSRF token and authorized ID. Returns the parsed student profile data on success, or a session/network error if authentication fails or the server is unreachable.
+    ///
+    /// # Returns
+    /// The student's complete profile information as a `StudentProfileAllView` object.
+    ///
+    /// # Errors
+    /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, or `VtopError::NetworkError`/`VtopError::VtopServerError` on network or server failure.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let profile = client.get_student_profile().await?;
+    /// println!("Student name: {}", profile.name);
+    /// ```
     pub async fn get_student_profile(
         &mut self,
     ) -> VtopResult<crate::api::vtop::types::profile::StudentProfileAllView> {
@@ -182,6 +258,16 @@ impl VtopClient {
     }
 
     // Hostel Get Leave Report
+    /// Retrieves the student's hostel leave report from the VTOP system.
+    ///
+    /// Returns the parsed hostel leave data if the session is authenticated. Returns a session expired error if authentication has expired or a network/server error if the request fails.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let leave_report = client.get_hostel_leave_report().await?;
+    /// println!("{:?}", leave_report);
+    /// ```
     pub async fn get_hostel_leave_report(&mut self) -> VtopResult<HostelLeaveData> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
