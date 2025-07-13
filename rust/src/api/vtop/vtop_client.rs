@@ -123,7 +123,7 @@ impl VtopClient {
         }
         let url = format!("{}/vtop/examinations/examGradeView/StudentGradeHistory", self.config.base_url);
         let body = format!(
-            "verifyMenu=True&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,
