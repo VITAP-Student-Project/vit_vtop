@@ -39,19 +39,58 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
         }
         let row_selector = Selector::parse("tr.tableContent").unwrap();
         for row in table.select(&row_selector) {
+        // Course table column indices
+        const COURSE_CODE_COL: usize = 1;
+        const COURSE_TITLE_COL: usize = 2;
+        const COURSE_TYPE_COL: usize = 3;
+        const CREDITS_COL: usize = 4;
+        const GRADE_COL: usize = 5;
+        const EXAM_MONTH_COL: usize = 6;
+        const COURSE_DISTRIBUTION_COL: usize = 8;
+        const MIN_COLUMNS: usize = 10;
+
+        for row in table.select(&row_selector) {
             let tds: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
-            if tds.len() >= 10 {
-                let course_code = tds[1].text().collect::<String>().trim().to_string();
+            if tds.len() >= MIN_COLUMNS {
+                let course_code = tds[COURSE_CODE_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
                 // Skip header rows or rows with empty course code
                 if course_code == "Course Code" || course_code.is_empty() {
                     continue;
                 }
-                let course_title = tds[2].text().collect::<String>().trim().to_string();
-                let course_type = tds[3].text().collect::<String>().trim().to_string();
-                let credits = tds[4].text().collect::<String>().trim().to_string();
-                let grade = tds[5].text().collect::<String>().trim().to_string();
-                let exam_month = tds[6].text().collect::<String>().trim().to_string();
-                let course_distribution = tds[8].text().collect::<String>().trim().to_string();
+                let course_title = tds[COURSE_TITLE_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
+                let course_type = tds[COURSE_TYPE_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
+                let credits = tds[CREDITS_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
+                let grade = tds[GRADE_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
+                let exam_month = tds[EXAM_MONTH_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
+                let course_distribution = tds[COURSE_DISTRIBUTION_COL]
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
 
                 courses.push(GradeCourseHistory {
                     course_code,
@@ -63,6 +102,7 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
                     course_distribution,
                 });
             }
+        }
         }
     }
 
