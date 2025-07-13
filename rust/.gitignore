@@ -25,6 +25,7 @@ main.rs
 
 *.pdf
 *pdf
+*.html
 
 # Node.js
 node_modules/

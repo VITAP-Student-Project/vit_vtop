@@ -172,6 +172,7 @@ pub async fn leave_report_download(
 /// let profile = student_profile(&mut client).await.unwrap();
 /// assert_eq!(profile.name, "John Doe");
 /// ```
+#[flutter_rust_bridge::frb()]
 pub async fn student_profile(
     client: &mut VtopClient,
 ) -> Result<StudentProfileAllView, VtopError> {
@@ -206,6 +207,7 @@ pub async fn student_grade_history(
 /// let payments = student_pending_payments(&mut client).await?;
 /// assert!(!payments.is_empty() || payments.is_empty());
 /// ```
+#[flutter_rust_bridge::frb()]
 pub async fn student_pending_payments(
     client: &mut VtopClient,
 ) -> Result<Vec<PendingPayment>, VtopError> {
@@ -222,8 +224,18 @@ pub async fn student_pending_payments(
 /// let receipts = student_payment_receipts(&mut client).await?;
 /// assert!(!receipts.is_empty());
 /// ```
+#[flutter_rust_bridge::frb()]
 pub async fn student_payment_receipts(
     client: &mut VtopClient,
 ) -> Result<Vec<PaymentReceipt>, VtopError> {
     client.get_payment_receipts().await
+}
+
+/// Downloads a specific payment receipt as a PDF file.
+pub async fn student_payment_receipt_download(
+    client: &mut VtopClient,
+    receipt_no: String,
+    applno: String,
+) -> Result<String, VtopError> {
+    client.download_payment_receipt(receipt_no, applno).await
 }

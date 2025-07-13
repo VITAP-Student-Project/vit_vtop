@@ -60,6 +60,39 @@ impl VtopClient {
         Ok(data)
     }
 
+    pub async fn download_payment_receipt(&mut self, receipt_no: String , applno: String) -> VtopResult<String> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!(
+            "{}/vtop/finance/dupReceiptNewP2P?receitNo={}&authorizedID={}&_csrf={}&x={}&registerNumber={}&applno={}",
+            self.config.base_url,
+            receipt_no,
+            self.username,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            chrono::Utc::now().to_rfc2822(),
+            self.username,
+            applno // This should be replaced with the actual application number if needed
+        );
+
+        let res = self
+            .client
+            .get(url)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        if !res.status().is_success() || res.url().to_string().contains("login") {
+            self.session.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+
+        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        Ok(text)
+    }
+
     /// Retrieves the list of payment receipts for the authenticated user.
     ///
     /// Returns a vector of `PaymentReceipt` objects parsed from the VTOP system. If the session is expired or authentication fails, returns a `SessionExpired` error. Network or server errors are also reported as appropriate.
@@ -76,9 +109,7 @@ impl VtopClient {
     /// let receipts = client.get_payment_receipts().await?;
     /// assert!(!receipts.is_empty());
     /// ```
-    pub async  fn get_payment_receipts(
-        &mut self
-    ) -> VtopResult<Vec<PaymentReceipt>> {
+    pub async fn get_payment_receipts(&mut self) -> VtopResult<Vec<PaymentReceipt>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -105,7 +136,8 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let receipts: Vec<PaymentReceipt> = parser::parsepaymentreceipts::parse_payment_receipts(text);
+        let receipts: Vec<PaymentReceipt> =
+            parser::parsepaymentreceipts::parse_payment_receipts(text);
         Ok(receipts)
     }
 
@@ -126,9 +158,7 @@ impl VtopClient {
     /// let pending = client.get_pending_payment().await?;
     /// assert!(!pending.is_empty());
     /// ```
-    pub async fn get_pending_payment(
-        &mut self
-    ) -> VtopResult<Vec<PendingPayment>> {
+    pub async fn get_pending_payment(&mut self) -> VtopResult<Vec<PendingPayment>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -158,8 +188,6 @@ impl VtopClient {
         let pending_payment = parser::parsependingpayments::parse_pending_payments(text);
         Ok(pending_payment)
     }
-    
-
 
     /// Retrieves the student's grade history and detailed course grade records.
     ///
@@ -176,12 +204,15 @@ impl VtopClient {
     /// assert!(!course_details.is_empty());
     /// ```
     pub async fn get_grade_history(
-        &mut self
+        &mut self,
     ) -> VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
-        let url = format!("{}/vtop/examinations/examGradeView/StudentGradeHistory", self.config.base_url);
+        let url = format!(
+            "{}/vtop/examinations/examGradeView/StudentGradeHistory",
+            self.config.base_url
+        );
         let body = format!(
             "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
@@ -230,7 +261,10 @@ impl VtopClient {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
-        let url = format!("{}/vtop/studentsRecord/StudentProfileAllView", self.config.base_url);
+        let url = format!(
+            "{}/vtop/studentsRecord/StudentProfileAllView",
+            self.config.base_url
+        );
         let body = format!(
             "_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
