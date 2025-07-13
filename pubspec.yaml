@@ -1,24 +1,21 @@
 name: vit_vtop
-description: "Flutter package that provides Dart bindings for the VTOP rust library"
+description: "Dart package that provides Dart bindings for the VTOP rust library"
 version: 0.0.1
-homepage: https://vitap.udhay-adithya.me
+repository: https://github.com/VITAP-Student-Project/vit_vtop
 
 environment:
   sdk: ^3.7.2
-  flutter: ">=1.17.0"
 
 dependencies:
   ffi: ^2.1.4
-  flutter:
-    sdk: flutter
   flutter_rust_bridge: ^2.11.1
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
+  dotenv: ^4.2.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
+  lints: ^5.0.0
+  test: ^1.24.0
   ffigen: ^19.0.0
   build_runner: ^2.4.8
   freezed: ^3.1.0

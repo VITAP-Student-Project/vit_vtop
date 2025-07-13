@@ -1,4 +1,4 @@
-/// A Flutter package that provides Dart bindings for the VTOP (VIT Academic Portal) library.
+/// A Dart package that provides Dart bindings for the VTOP (VIT Academic Portal) library.
 ///
 /// This package allows you to interact with the VTOP system for various academic operations
 /// including attendance management, timetable access, marks retrieval, and more.
@@ -11,30 +11,23 @@ export 'src/rust/frb_generated.dart' show RustLib;
 export 'src/rust/api/simple.dart';
 export 'src/rust/api/vtop_get_client.dart';
 
-// Type exports
-export 'src/rust/api/vtop/types.dart';
-export 'src/rust/api/vtop/vtop_client.dart';
-export 'src/rust/api/vtop/vtop_config.dart';
-export 'src/rust/api/vtop/vtop_errors.dart';
-export 'src/rust/api/vtop/wifi.dart';
-export 'src/rust/api/vtop/session_manager.dart';
-
-// Re-export commonly used types
-export 'src/rust/api/vtop/types.dart'
-    show
-        AttendanceData,
-        AttendanceRecord,
-        BiometricData,
-        BiometricRecord,
-        ExamScheduleData,
-        FacultyDetails,
-        FullAttendanceData,
-        GetFaculty,
-        MarksData,
-        SemesterData,
-        TimetableData,
-        HostelOutingData,
-        HostelLeaveData;
-
+// VTOP client and configuration exports
 export 'src/rust/api/vtop/vtop_client.dart' show VtopClient;
+export 'src/rust/api/vtop/vtop_config.dart' show VtopConfig;
 export 'src/rust/api/vtop/vtop_errors.dart' show VtopError;
+export 'src/rust/api/vtop/wifi.dart';
+export 'src/rust/api/vtop/session_manager.dart' show SessionManager;
+
+// Type exports
+export 'src/rust/api/vtop/types/attendance.dart'
+    show AttendanceRecord, AttendanceDetailRecord;
+export 'src/rust/api/vtop/types/biometric.dart' show BiometricRecord;
+export 'src/rust/api/vtop/types/exam_schedule.dart'
+    show ExamScheduleRecord, PerExamScheduleRecord;
+export 'src/rust/api/vtop/types/faculty.dart'
+    show FacultyDetails, GetFaculty, OfficeHour;
+export 'src/rust/api/vtop/types/hostel.dart'
+    show HostelOutingData, HostelLeaveData, OutingRecord, LeaveRecord;
+export 'src/rust/api/vtop/types/marks.dart' show MarksRecord, MarksRecordEach;
+export 'src/rust/api/vtop/types/semester.dart' show SemesterData, SemesterInfo;
+export 'src/rust/api/vtop/types/timetable.dart' show TimetableSlot;

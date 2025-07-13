@@ -2,6 +2,25 @@
 
 A Flutter package that provides Dart bindings for the VTOP (VIT Academic Portal) library using flutter_rust_bridge.
 
+## Package Structure
+
+This is a **Dart/Flutter package** that wraps a Rust library providing VTOP functionality. It can be used in:
+- Flutter applications (mobile, web, desktop)
+- Pure Dart applications (CLI tools, servers)
+- As a dependency in other packages
+
+### Terminal Application
+
+The `lib/main.dart` file contains a complete **terminal application** demonstrating the package usage. You can:
+
+1. **Run directly**: `dart run`
+2. **Compile to executable**: `dart compile exe lib/main.dart -o vtop_terminal`
+3. **Use as reference** for integrating into your Flutter app
+
+### Example Usage
+
+See `example/terminal_demo.dart` for a simple demonstration of package usage.
+
 ## Features
 
 This package allows Flutter applications to interact with the VTOP system for various academic operations:

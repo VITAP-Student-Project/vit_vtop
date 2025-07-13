@@ -1,310 +1,295 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:dotenv/dotenv.dart';
 import 'package:vit_vtop/vit_vtop.dart';
 
 Future<void> main() async {
   await RustLib.init();
-  runApp(const MyApp());
+
+  // Load environment variables
+  final env = DotEnv(includePlatformEnvironment: true);
+  try {
+    env.load(['.env']);
+  } catch (e) {
+    // .env file doesn't exist or couldn't be loaded
+    print('Note: .env file not found, will prompt for credentials');
+  }
+
+  print('=== VTOP Terminal Client ===');
+  print('Welcome to VIT VTOP Command Line Interface\n');
+
+  // Get login credentials from environment or user input
+  String username = env['VTOP_USERNAME'] ?? '';
+  String password = env['VTOP_PASSWORD'] ?? '';
+
+  if (username.isEmpty || password.isEmpty) {
+    print('Credentials not found in .env file, please enter manually:');
+
+    if (username.isEmpty) {
+      stdout.write('Enter Username: ');
+      username = stdin.readLineSync() ?? '';
+    } else {
+      print('Using username from .env: $username');
+    }
+
+    if (password.isEmpty) {
+      stdout.write('Enter Password: ');
+      stdin.echoMode = false; // Hide password input
+      password = stdin.readLineSync() ?? '';
+      stdin.echoMode = true;
+      print('');
+    } else {
+      print('Using password from .env file');
+    }
+  } else {
+    print('Using credentials from .env file');
+    print('Username: $username');
+  }
+
+  if (username.isEmpty || password.isEmpty) {
+    print('Error: Username and password cannot be empty');
+    exit(1);
+  }
+
+  try {
+    // Create VTOP client
+    print('Creating VTOP client...');
+    final client = getVtopClient(username: username, password: password);
+    print('✓ Client created successfully');
+
+    // Login
+    print('Logging in...');
+    await vtopClientLogin(client: client);
+    print('✓ Login successful\n');
+
+    // Main menu loop
+    while (true) {
+      print('=== VTOP Actions ===');
+      print('1. Fetch Semesters');
+      print('2. Fetch Attendance');
+      print('3. Fetch Timetable');
+      print('4. Fetch Marks');
+      print('5. Fetch Exam Schedule');
+      print('6. Test Rust Bridge');
+      print('0. Exit');
+      stdout.write('\nSelect an option (0-6): ');
+
+      final choice = stdin.readLineSync() ?? '';
+      print('');
+
+      switch (choice) {
+        case '1':
+          await fetchAndDisplaySemesters(client);
+          break;
+        case '2':
+          await fetchAndDisplayAttendance(client);
+          break;
+        case '3':
+          await fetchAndDisplayTimetable(client);
+          break;
+        case '4':
+          await fetchAndDisplayMarks(client);
+          break;
+        case '5':
+          await fetchAndDisplayExamSchedule(client);
+          break;
+        case '6':
+          testRustBridge();
+          break;
+        case '0':
+          print('Goodbye!');
+          exit(0);
+        default:
+          print('Invalid option. Please try again.\n');
+      }
+    }
+  } catch (e) {
+    print('Error: $e');
+    exit(1);
+  }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void testRustBridge() {
+  try {
+    final greeting = greet(name: "VTOP Terminal User");
+    print('Rust bridge test result: $greeting\n');
+  } catch (e) {
+    print('Rust bridge test failed: $e\n');
+  }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'VTOP Client Demo',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      home: const VtopHomePage(),
+Future<void> fetchAndDisplaySemesters(VtopClient client) async {
+  try {
+    print('Fetching semesters...');
+    final semesters = await fetchSemesters(client: client);
+
+    print('✓ Found ${semesters.semesters.length} semesters:');
+    print('\n=== SEMESTERS JSON ===');
+    print(const JsonEncoder.withIndent('  ').convert(semesters.toJson()));
+    print('');
+  } catch (e) {
+    print('Error fetching semesters: $e\n');
+  }
+}
+
+Future<void> fetchAndDisplayAttendance(VtopClient client) async {
+  try {
+    // First get semesters to choose from
+    final semesters = await fetchSemesters(client: client);
+
+    if (semesters.semesters.isEmpty) {
+      print('No semesters found.');
+      return;
+    }
+
+    print('Available semesters:');
+    for (int i = 0; i < semesters.semesters.length; i++) {
+      print('${i + 1}. ${semesters.semesters[i].name}');
+    }
+
+    stdout.write('Select semester (1-${semesters.semesters.length}): ');
+    final choice = int.tryParse(stdin.readLineSync() ?? '') ?? 0;
+
+    if (choice < 1 || choice > semesters.semesters.length) {
+      print('Invalid choice.\n');
+      return;
+    }
+
+    final selectedSemester = semesters.semesters[choice - 1];
+    print('Fetching attendance for ${selectedSemester.name}...');
+
+    final attendance = await fetchAttendance(
+      client: client,
+      semesterId: selectedSemester.id,
     );
+
+    print('✓ Found ${attendance.length} courses:');
+    print('\n=== ATTENDANCE JSON ===');
+    final attendanceJson = attendance.map((record) => record.toJson()).toList();
+    print(const JsonEncoder.withIndent('  ').convert(attendanceJson));
+    print('');
+  } catch (e) {
+    print('Error fetching attendance: $e\n');
   }
 }
 
-class VtopHomePage extends StatefulWidget {
-  const VtopHomePage({super.key});
+Future<void> fetchAndDisplayTimetable(VtopClient client) async {
+  try {
+    final semesters = await fetchSemesters(client: client);
 
-  @override
-  State<VtopHomePage> createState() => _VtopHomePageState();
-}
-
-class _VtopHomePageState extends State<VtopHomePage> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  VtopClient? _client;
-  bool _isLoading = false;
-  String _status = '';
-  SemesterData? _semesters;
-  AttendanceData? _attendance;
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _updateStatus(String status) {
-    setState(() {
-      _status = status;
-    });
-  }
-
-  Future<void> _testConnection() async {
-    final greeting = greet(name: "VTOP User");
-    _updateStatus('Rust bridge test: $greeting');
-  }
-
-  Future<void> _createClient() async {
-    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
-      _updateStatus('Please enter username and password');
+    if (semesters.semesters.isEmpty) {
+      print('No semesters found.');
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      _client = getVtopClient(
-        username: _usernameController.text,
-        password: _passwordController.text,
-      );
-      _updateStatus('VTOP client created successfully');
-    } catch (e) {
-      _updateStatus('Error creating client: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    print('Available semesters:');
+    for (int i = 0; i < semesters.semesters.length; i++) {
+      print('${i + 1}. ${semesters.semesters[i].name}');
     }
-  }
 
-  Future<void> _login() async {
-    if (_client == null) {
-      _updateStatus('Please create a client first');
+    stdout.write('Select semester (1-${semesters.semesters.length}): ');
+    final choice = int.tryParse(stdin.readLineSync() ?? '') ?? 0;
+
+    if (choice < 1 || choice > semesters.semesters.length) {
+      print('Invalid choice.\n');
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    final selectedSemester = semesters.semesters[choice - 1];
+    print('Fetching timetable for ${selectedSemester.name}...');
 
-    try {
-      await vtopClientLogin(client: _client!);
-      _updateStatus('Login successful');
-    } catch (e) {
-      _updateStatus('Login failed: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _fetchSemesters() async {
-    if (_client == null) {
-      _updateStatus('Please create a client and login first');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      _semesters = await fetchSemesters(client: _client!);
-      _updateStatus('Fetched ${_semesters!.semesters.length} semesters');
-      setState(() {});
-    } catch (e) {
-      _updateStatus('Error fetching semesters: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _fetchAttendance(String semesterId) async {
-    if (_client == null) {
-      _updateStatus('Please create a client and login first');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      _attendance = await fetchAttendance(
-        client: _client!,
-        semesterId: semesterId,
-      );
-      _updateStatus(
-        'Fetched attendance for ${_attendance!.records.length} courses',
-      );
-      setState(() {});
-    } catch (e) {
-      _updateStatus('Error fetching attendance: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('VTOP Client Demo'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Test connection
-            ElevatedButton(
-              onPressed: _testConnection,
-              child: const Text('Test Rust Bridge Connection'),
-            ),
-            const SizedBox(height: 16),
-
-            // Login form
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'VTOP Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
-                      ),
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _createClient,
-                            child: const Text('Create Client'),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _login,
-                            child: const Text('Login'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Actions
-            ElevatedButton(
-              onPressed: _isLoading ? null : _fetchSemesters,
-              child: const Text('Fetch Semesters'),
-            ),
-            const SizedBox(height: 16),
-
-            // Status
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Status: $_status',
-                style: const TextStyle(fontFamily: 'monospace'),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Results
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (_semesters != null) ...[
-                      const Text(
-                        'Semesters:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ...(_semesters!.semesters.map(
-                        (semester) => Card(
-                          child: ListTile(
-                            title: Text(semester.name),
-                            subtitle: Text('ID: ${semester.id}'),
-                            trailing: ElevatedButton(
-                              onPressed: () => _fetchAttendance(semester.id),
-                              child: const Text('Get Attendance'),
-                            ),
-                          ),
-                        ),
-                      )),
-                    ],
-                    if (_attendance != null) ...[
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Attendance:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ...(_attendance!.records.map(
-                        (record) => Card(
-                          child: ListTile(
-                            title: Text(record.courseName),
-                            subtitle: Text(
-                              '${record.courseCode} - ${record.attendancePercentage}%',
-                            ),
-                            trailing: Text(
-                              '${record.classesAttended}/${record.totalClasses}',
-                            ),
-                          ),
-                        ),
-                      )),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    final timetable = await fetchTimetable(
+      client: client,
+      semesterId: selectedSemester.id,
     );
+
+    print('✓ Found ${timetable.length} timetable slots:');
+    print('\n=== TIMETABLE JSON ===');
+    final timetableJson = timetable.map((slot) => slot.toJson()).toList();
+    print(const JsonEncoder.withIndent('  ').convert(timetableJson));
+    print('');
+  } catch (e) {
+    print('Error fetching timetable: $e\n');
+  }
+}
+
+Future<void> fetchAndDisplayMarks(VtopClient client) async {
+  try {
+    final semesters = await fetchSemesters(client: client);
+
+    if (semesters.semesters.isEmpty) {
+      print('No semesters found.');
+      return;
+    }
+
+    print('Available semesters:');
+    for (int i = 0; i < semesters.semesters.length; i++) {
+      print('${i + 1}. ${semesters.semesters[i].name}');
+    }
+
+    stdout.write('Select semester (1-${semesters.semesters.length}): ');
+    final choice = int.tryParse(stdin.readLineSync() ?? '') ?? 0;
+
+    if (choice < 1 || choice > semesters.semesters.length) {
+      print('Invalid choice.\n');
+      return;
+    }
+
+    final selectedSemester = semesters.semesters[choice - 1];
+    print('Fetching marks for ${selectedSemester.name}...');
+
+    final marks = await fetchMarks(
+      client: client,
+      semesterId: selectedSemester.id,
+    );
+
+    print('✓ Found ${marks.length} courses with marks:');
+    print('\n=== MARKS JSON ===');
+    final marksJson = marks.map((record) => record.toJson()).toList();
+    print(const JsonEncoder.withIndent('  ').convert(marksJson));
+    print('');
+  } catch (e) {
+    print('Error fetching marks: $e\n');
+  }
+}
+
+Future<void> fetchAndDisplayExamSchedule(VtopClient client) async {
+  try {
+    final semesters = await fetchSemesters(client: client);
+
+    if (semesters.semesters.isEmpty) {
+      print('No semesters found.');
+      return;
+    }
+
+    print('Available semesters:');
+    for (int i = 0; i < semesters.semesters.length; i++) {
+      print('${i + 1}. ${semesters.semesters[i].name}');
+    }
+
+    stdout.write('Select semester (1-${semesters.semesters.length}): ');
+    final choice = int.tryParse(stdin.readLineSync() ?? '') ?? 0;
+
+    if (choice < 1 || choice > semesters.semesters.length) {
+      print('Invalid choice.\n');
+      return;
+    }
+
+    final selectedSemester = semesters.semesters[choice - 1];
+    print('Fetching exam schedule for ${selectedSemester.name}...');
+
+    final examSchedule = await fetchExamShedule(
+      client: client,
+      semesterId: selectedSemester.id,
+    );
+
+    print('✓ Found ${examSchedule.length} exam schedules:');
+    print('\n=== EXAM SCHEDULE JSON ===');
+    final examScheduleJson =
+        examSchedule.map((schedule) => schedule.toJson()).toList();
+    print(const JsonEncoder.withIndent('  ').convert(examScheduleJson));
+    print('');
+  } catch (e) {
+    print('Error fetching exam schedule: $e\n');
   }
 }
