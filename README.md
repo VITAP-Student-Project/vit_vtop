@@ -23,7 +23,7 @@
     <img src="https://img.shields.io/pub/v/vit_vtop.svg" alt="Pub Version">
     </a>
     <h1 align="center">VIT VTOP</h1>
-    <p align="center">A high-performance Flutter package that provides Dart bindings for the VTOP (VIT Academic Portal) library using flutter_rust_bridge. Built with Rust for speed and reliability, designed for Flutter developers who need seamless VTOP integration.
+    <p align="center">A high-performance Dart package that provides Dart bindings for the lib_vtop rust library. Built with Rust for speed and reliability, designed for Flutter developers who need seamless VTOP integration.
     </p>
 </p>
 <br>
@@ -50,7 +50,7 @@
 
 ## 🚀 Features
 
-This package allows Flutter applications to interact with the VTOP system for various academic operations:
+This package allows Flutter/Dart applications to interact with the VTOP system for various academic operations:
 
 - **🔐 Authentication**
   - Secure login and session management
@@ -96,10 +96,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  vit_vtop:
-    git:
-      url: https://github.com/VITAP-Student-Project/vit_vtop.git
-      ref: main
+  vit_vtop: ^0.0.1
 ```
 
 Then run:
