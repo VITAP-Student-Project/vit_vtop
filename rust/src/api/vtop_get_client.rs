@@ -175,7 +175,7 @@ pub async fn leave_report_download(
 /// assert_eq!(profile.name, "John Doe");
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn student_profile(client: &mut VtopClient) -> Result<StudentProfile, VtopError> {
+pub async fn fetch_student_profile(client: &mut VtopClient) -> Result<StudentProfile, VtopError> {
     client.get_student_profile().await
 }
 
@@ -190,7 +190,7 @@ pub async fn student_profile(client: &mut VtopClient) -> Result<StudentProfile, 
 /// assert!(!course_histories.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn student_grade_history(
+pub async fn fetch_grade_history(
     client: &mut VtopClient,
 ) -> Result<
     (
@@ -213,7 +213,7 @@ pub async fn student_grade_history(
 /// assert!(!payments.is_empty() || payments.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn student_pending_payments(
+pub async fn fetch_pending_payments(
     client: &mut VtopClient,
 ) -> Result<Vec<PendingPaymentReceipt>, VtopError> {
     client.get_pending_payment().await
@@ -230,7 +230,7 @@ pub async fn student_pending_payments(
 /// assert!(!receipts.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn student_payment_receipts(
+pub async fn fetch_payment_receipts(
     client: &mut VtopClient,
 ) -> Result<Vec<PaidPaymentReceipt>, VtopError> {
     client.get_payment_receipts().await
