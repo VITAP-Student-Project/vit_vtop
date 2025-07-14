@@ -45,9 +45,12 @@ async fn main() {
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
         //  "AP2024258".to_string()
-        match api::vtop_get_client::fetch_student_profile(&mut client).await {
-            Ok(result) => println!("Profile: {:?}", result),
-            Err(e) => println!("❌ VTOP login failed: {:?}", e),
+        match api::vtop_get_client::fetch_all_data(&mut client, "AP2024258".to_string()).await {
+            Ok(result) => match serde_json::to_string_pretty(&result) {
+                Ok(json) => println!("✅ Profile (JSON):\n{}", json),
+                Err(e) => println!("❌ Failed to serialize profile to JSON: {:?}", e),
+            },
+            Err(e) => println!("❌ VTOP fetch_all_data failed: {:?}", e),
         }
     } else {
         println!("ℹ️  No real credentials provided. Use VTOP_USERNAME and VTOP_PASSWORD env vars for real testing.");

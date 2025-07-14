@@ -1,8 +1,9 @@
 use crate::api::vtop::{
     types::{
-        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty,
-        GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaidPaymentReceipt,
-        PendingPaymentReceipt, PerExamScheduleRecord, SemesterData, StudentProfile, TimetableSlot,
+        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, ComprehensiveDataResponse,
+        FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord,
+        PaidPaymentReceipt, PendingPaymentReceipt, PerExamScheduleRecord, SemesterData,
+        StudentProfile, TimetableSlot,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -243,4 +244,36 @@ pub async fn student_payment_receipt_download(
     applno: String,
 ) -> Result<String, VtopError> {
     client.download_payment_receipt(receipt_no, applno).await
+}
+
+/// Fetches comprehensive student data including profile, attendance, timetable,
+/// exam schedule, grade history, and marks for a specific semester.
+///
+/// This function consolidates multiple API calls into a single request, providing
+/// all essential student data in one response structure.
+///
+/// # Returns
+/// A `ComprehensiveDataResponse` containing all student data on success, or a `VtopError` on failure.
+
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_all_data(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<ComprehensiveDataResponse, VtopError> {
+    // Fetch all data sequentially due to Rust borrowing rules
+    let profile = client.get_student_profile().await?;
+    let attendance = client.get_attendance(&semester_id).await?;
+    let timetable = client.get_timetable(&semester_id).await?;
+    let exam_schedule = client.get_exam_schedule(&semester_id).await?;
+    let (_grade_history, grade_course_history) = client.get_grade_history().await?;
+    let marks = client.get_marks(&semester_id).await?;
+
+    Ok(ComprehensiveDataResponse {
+        profile,
+        attendance,
+        timetable,
+        exam_schedule,
+        grade_course_history,
+        marks,
+    })
 }
