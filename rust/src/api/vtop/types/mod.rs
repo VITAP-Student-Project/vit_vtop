@@ -7,9 +7,10 @@ pub mod grade_history;
 pub mod hostel;
 pub mod marks;
 pub mod mentor_details;
-pub mod payments;
-pub mod student_profile;
+pub mod paid_payment_receipt;
+pub mod pending_payment_receipt;
 pub mod semester;
+pub mod student_profile;
 pub mod timetable;
 
 // Re-export all types for easy access
@@ -22,7 +23,8 @@ pub use grade_history::*;
 pub use hostel::*;
 pub use marks::*;
 pub use mentor_details::*;
-pub use payments::*;
-pub use student_profile::*;
+pub use paid_payment_receipt::*;
+pub use pending_payment_receipt::*;
 pub use semester::*;
+pub use student_profile::*;
 pub use timetable::*;

@@ -99,10 +99,10 @@ impl VtopClient {
 
     /// Retrieves the list of payment receipts for the authenticated user.
     ///
-    /// Returns a vector of `PaymentReceipt` objects parsed from the VTOP system. If the session is expired or authentication fails, returns a `SessionExpired` error. Network or server errors are also reported as appropriate.
+    /// Returns a vector of `PaidPaymentReceipt` objects parsed from the VTOP system. If the session is expired or authentication fails, returns a `SessionExpired` error. Network or server errors are also reported as appropriate.
     ///
     /// # Returns
-    /// A vector of `PaymentReceipt` on success.
+    /// A vector of `PaidPaymentReceipt` on success.
     ///
     /// # Errors
     /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, and `VtopError::VtopServerError` on server response errors.
@@ -113,7 +113,7 @@ impl VtopClient {
     /// let receipts = client.get_payment_receipts().await?;
     /// assert!(!receipts.is_empty());
     /// ```
-    pub async fn get_payment_receipts(&mut self) -> VtopResult<Vec<PaymentReceipt>> {
+    pub async fn get_payment_receipts(&mut self) -> VtopResult<Vec<PaidPaymentReceipt>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -140,17 +140,17 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let receipts: Vec<PaymentReceipt> =
+        let receipts: Vec<PaidPaymentReceipt> =
             parser::parsepaymentreceipts::parse_payment_receipts(text);
         Ok(receipts)
     }
 
     /// Retrieves the list of pending payments for the authenticated user.
     ///
-    /// Returns a vector of `PendingPayment` records if the session is valid. If the session has expired or the network/server fails, an appropriate error is returned.
+    /// Returns a vector of `PendingPaymentReceipt` records if the session is valid. If the session has expired or the network/server fails, an appropriate error is returned.
     ///
     /// # Returns
-    /// A `VtopResult` containing a vector of `PendingPayment` items on success.
+    /// A `VtopResult` containing a vector of `PendingPaymentReceipt` items on success.
     ///
     /// # Errors
     /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, or `VtopError::VtopServerError` if the server response cannot be parsed.
@@ -162,7 +162,7 @@ impl VtopClient {
     /// let pending = client.get_pending_payment().await?;
     /// assert!(!pending.is_empty());
     /// ```
-    pub async fn get_pending_payment(&mut self) -> VtopResult<Vec<PendingPayment>> {
+    pub async fn get_pending_payment(&mut self) -> VtopResult<Vec<PendingPaymentReceipt>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }

@@ -1,4 +1,4 @@
-use crate::api::vtop::types::payments::PaymentReceipt;
+use crate::api::vtop::types::paid_payment_receipt::PaidPaymentReceipt;
 use scraper::{Html, Selector};
 
 /// Parses an HTML string to extract payment receipt information from a table.
@@ -30,7 +30,7 @@ use scraper::{Html, Selector};
 /// assert_eq!(receipts[0].receipt_number, "12345");
 /// assert_eq!(receipts[0].receipt_no, "12345/2024/ABC");
 /// ```
-pub fn parse_payment_receipts(html: String) -> Vec<PaymentReceipt> {
+pub fn parse_payment_receipts(html: String) -> Vec<PaidPaymentReceipt> {
     let doc = Html::parse_document(&html);
     let mut results = Vec::new();
 
@@ -38,7 +38,8 @@ pub fn parse_payment_receipts(html: String) -> Vec<PaymentReceipt> {
     let table_selector = Selector::parse("table.table.table-bordered").unwrap();
     if let Some(table) = doc.select(&table_selector).next() {
         let row_selector = Selector::parse("tr").unwrap();
-        for row in table.select(&row_selector).skip(1) { // skip header
+        for row in table.select(&row_selector).skip(1) {
+            // skip header
             let tds: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
             if tds.len() >= 5 {
                 let receipt_number = tds[0].text().collect::<String>().trim().to_string();
@@ -62,7 +63,7 @@ pub fn parse_payment_receipts(html: String) -> Vec<PaymentReceipt> {
                     }
                 }
 
-                results.push(PaymentReceipt {
+                results.push(PaidPaymentReceipt {
                     receipt_number,
                     date,
                     amount,

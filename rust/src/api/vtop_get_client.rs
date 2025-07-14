@@ -1,8 +1,8 @@
 use crate::api::vtop::{
     types::{
         AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty,
-        GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaymentReceipt,
-        PendingPayment, PerExamScheduleRecord, SemesterData, StudentProfile, TimetableSlot,
+        GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaidPaymentReceipt,
+        PendingPaymentReceipt, PerExamScheduleRecord, SemesterData, StudentProfile, TimetableSlot,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -204,7 +204,7 @@ pub async fn student_grade_history(
 
 /// Retrieves a list of pending payments for the student.
 ///
-/// Returns a vector of `PendingPayment` records on success, or a `VtopError` if the operation fails.
+/// Returns a vector of `PendingPaymentReceipt` records on success, or a `VtopError` if the operation fails.
 ///
 /// # Examples
 ///
@@ -215,13 +215,13 @@ pub async fn student_grade_history(
 #[flutter_rust_bridge::frb()]
 pub async fn student_pending_payments(
     client: &mut VtopClient,
-) -> Result<Vec<PendingPayment>, VtopError> {
+) -> Result<Vec<PendingPaymentReceipt>, VtopError> {
     client.get_pending_payment().await
 }
 
 /// Retrieves the student's payment receipt records.
 ///
-/// Returns a vector of `PaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
+/// Returns a vector of `PaidPaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
 ///
 /// # Examples
 ///
@@ -232,7 +232,7 @@ pub async fn student_pending_payments(
 #[flutter_rust_bridge::frb()]
 pub async fn student_payment_receipts(
     client: &mut VtopClient,
-) -> Result<Vec<PaymentReceipt>, VtopError> {
+) -> Result<Vec<PaidPaymentReceipt>, VtopError> {
     client.get_payment_receipts().await
 }
 
