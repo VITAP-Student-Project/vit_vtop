@@ -1,7 +1,7 @@
-use crate::api::vtop::types::profile::{GradeHistory, MentorDetails, StudentProfileAllView};
+use crate::api::vtop::types::{GradeHistory, MentorDetails, StudentProfile};
 use scraper::{Html, Selector};
 
-/// Parses a student profile HTML page and returns a `StudentProfileAllView` struct with extracted profile, mentor, and grade history details.
+/// Parses a student profile HTML page and returns a `StudentProfile` struct with extracted profile, mentor, and grade history details.
 ///
 /// Extracts key student information, mentor (proctor) details, and the base64-encoded profile picture from the provided HTML.
 /// Fields not present in the HTML are set to empty strings or `"N/A"` as appropriate.
@@ -13,7 +13,7 @@ use scraper::{Html, Selector};
 /// let profile = parse_student_profile(html);
 /// assert!(!profile.student_name.is_empty());
 /// ```
-pub fn parse_student_profile(html: String) -> StudentProfileAllView {
+pub fn parse_student_profile(html: String) -> StudentProfile {
     let doc = Html::parse_document(&html);
 
     /// Searches for a table row whose first cell contains the specified label (case-insensitive) and returns the trimmed text of the second cell.
@@ -109,7 +109,11 @@ pub fn parse_student_profile(html: String) -> StudentProfileAllView {
     let mentor_section_selector = Selector::parse("div.accordion-item").unwrap();
     let mut mentor_html = None;
     for section in doc.select(&mentor_section_selector) {
-        if section.html().to_uppercase().contains("PROCTOR INFORMATION") {
+        if section
+            .html()
+            .to_uppercase()
+            .contains("PROCTOR INFORMATION")
+        {
             mentor_html = Some(Html::parse_fragment(&section.html()));
             break;
         }
@@ -143,7 +147,7 @@ pub fn parse_student_profile(html: String) -> StudentProfileAllView {
         cgpa: "N/A".to_string(),
     };
 
-    StudentProfileAllView {
+    StudentProfile {
         application_number,
         student_name,
         dob,

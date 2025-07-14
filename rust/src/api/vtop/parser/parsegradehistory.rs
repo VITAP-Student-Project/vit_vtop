@@ -1,4 +1,4 @@
-use crate::api::vtop::types::profile::{GradeCourseHistory, GradeHistory};
+use crate::api::vtop::types::{GradeCourseHistory, GradeHistory};
 use scraper::{Html, Selector};
 
 /// Parses an HTML string containing a student's grade history and extracts summary and course details.
@@ -22,7 +22,10 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
     let mut cgpa = String::from("N/A");
 
     let cgpa_table_selector = Selector::parse("table.table.table-hover.table-bordered").unwrap();
-    if let Some(table) = doc.select(&cgpa_table_selector).find(|t| t.html().contains("CGPA")) {
+    if let Some(table) = doc
+        .select(&cgpa_table_selector)
+        .find(|t| t.html().contains("CGPA"))
+    {
         let row_selector = Selector::parse("tbody tr").unwrap();
         if let Some(row) = table.select(&row_selector).next() {
             let tds: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
@@ -87,11 +90,7 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
                     .collect::<String>()
                     .trim()
                     .to_string();
-                let grade = tds[GRADE_COL]
-                    .text()
-                    .collect::<String>()
-                    .trim()
-                    .to_string();
+                let grade = tds[GRADE_COL].text().collect::<String>().trim().to_string();
                 let exam_month = tds[EXAM_MONTH_COL]
                     .text()
                     .collect::<String>()

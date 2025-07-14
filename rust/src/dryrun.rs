@@ -44,8 +44,9 @@ async fn main() {
             Ok(_) => println!("✅ VTOP login successful"),
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
-        match api::vtop_get_client::fetch_attendance(&mut client, "AP2024258".to_string()).await {
-            Ok(result) => println!("Attendance: {:?}", result),
+        //  "AP2024258".to_string()
+        match api::vtop_get_client::student_profile(&mut client).await {
+            Ok(result) => println!("Profile: {:?}", result),
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
     } else {

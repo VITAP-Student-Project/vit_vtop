@@ -60,7 +60,11 @@ impl VtopClient {
         Ok(data)
     }
 
-    pub async fn download_payment_receipt(&mut self, receipt_no: String , applno: String) -> VtopResult<String> {
+    pub async fn download_payment_receipt(
+        &mut self,
+        receipt_no: String,
+        applno: String,
+    ) -> VtopResult<String> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -244,7 +248,7 @@ impl VtopClient {
     /// Sends a POST request to the VTOP student profile endpoint using the current session's CSRF token and authorized ID. Returns the parsed student profile data on success, or a session/network error if authentication fails or the server is unreachable.
     ///
     /// # Returns
-    /// The student's complete profile information as a `StudentProfileAllView` object.
+    /// The student's complete profile information as a `StudentProfile` object.
     ///
     /// # Errors
     /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, or `VtopError::NetworkError`/`VtopError::VtopServerError` on network or server failure.
@@ -257,7 +261,7 @@ impl VtopClient {
     /// ```
     pub async fn get_student_profile(
         &mut self,
-    ) -> VtopResult<crate::api::vtop::types::profile::StudentProfileAllView> {
+    ) -> VtopResult<crate::api::vtop::types::student_profile::StudentProfile> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }

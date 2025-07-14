@@ -1,6 +1,8 @@
 use crate::api::vtop::{
     types::{
-        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaymentReceipt, PendingPayment, PerExamScheduleRecord, SemesterData, StudentProfileAllView, TimetableSlot
+        AttendanceDetailRecord, AttendanceRecord, BiometricRecord, FacultyDetails, GetFaculty,
+        GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord, PaymentReceipt,
+        PendingPayment, PerExamScheduleRecord, SemesterData, StudentProfile, TimetableSlot,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -163,7 +165,7 @@ pub async fn leave_report_download(
 
 /// Retrieves the complete student profile for the authenticated user.
 ///
-/// Returns a `StudentProfileAllView` containing detailed profile information on success, or a `VtopError` if the operation fails.
+/// Returns a `StudentProfile` containing detailed profile information on success, or a `VtopError` if the operation fails.
 ///
 /// # Examples
 ///
@@ -173,9 +175,7 @@ pub async fn leave_report_download(
 /// assert_eq!(profile.name, "John Doe");
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn student_profile(
-    client: &mut VtopClient,
-) -> Result<StudentProfileAllView, VtopError> {
+pub async fn student_profile(client: &mut VtopClient) -> Result<StudentProfile, VtopError> {
     client.get_student_profile().await
 }
 
@@ -192,10 +192,15 @@ pub async fn student_profile(
 #[flutter_rust_bridge::frb()]
 pub async fn student_grade_history(
     client: &mut VtopClient,
-) -> Result<(GradeHistory, Vec<crate::api::vtop::types::GradeCourseHistory>), VtopError> {
+) -> Result<
+    (
+        GradeHistory,
+        Vec<crate::api::vtop::types::GradeCourseHistory>,
+    ),
+    VtopError,
+> {
     client.get_grade_history().await
 }
-
 
 /// Retrieves a list of pending payments for the student.
 ///
