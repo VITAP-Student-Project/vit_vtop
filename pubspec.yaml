@@ -1,6 +1,6 @@
 name: vit_vtop
 description: "Dart package that provides Dart bindings for the VTOP rust library"
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/VITAP-Student-Project/vit_vtop
 topics:
   - web-scrapping
@@ -16,7 +16,7 @@ dependencies:
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   dotenv: ^4.2.0
-  meta: ^1.17.0
+  meta: ^1.16.0
 
 dev_dependencies:
   lints: ^6.0.0
