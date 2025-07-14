@@ -26,8 +26,17 @@ export 'src/rust/api/vtop/types/exam_schedule.dart'
     show ExamScheduleRecord, PerExamScheduleRecord;
 export 'src/rust/api/vtop/types/faculty.dart'
     show FacultyDetails, GetFaculty, OfficeHour;
+export 'src/rust/api/vtop/types/grade_course_history.dart'
+    show GradeCourseHistory;
+export 'src/rust/api/vtop/types/grade_history.dart' show GradeHistory;
 export 'src/rust/api/vtop/types/hostel.dart'
     show HostelOutingData, HostelLeaveData, OutingRecord, LeaveRecord;
 export 'src/rust/api/vtop/types/marks.dart' show MarksRecord, MarksRecordEach;
+export 'src/rust/api/vtop/types/mentor_details.dart' show MentorDetails;
+export 'src/rust/api/vtop/types/paid_payment_receipt.dart'
+    show PaidPaymentReceipt;
+export 'src/rust/api/vtop/types/pending_payment_receipt.dart'
+    show PendingPaymentReceipt;
 export 'src/rust/api/vtop/types/semester.dart' show SemesterData, SemesterInfo;
+export 'src/rust/api/vtop/types/student_profile.dart' show StudentProfile;
 export 'src/rust/api/vtop/types/timetable.dart' show TimetableSlot;

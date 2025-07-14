@@ -10,9 +10,15 @@ import 'vtop/types/attendance.dart';
 import 'vtop/types/biometric.dart';
 import 'vtop/types/exam_schedule.dart';
 import 'vtop/types/faculty.dart';
+import 'vtop/types/grade_course_history.dart';
+import 'vtop/types/grade_history.dart';
 import 'vtop/types/hostel.dart';
 import 'vtop/types/marks.dart';
+import 'vtop/types/mentor_details.dart';
+import 'vtop/types/paid_payment_receipt.dart';
+import 'vtop/types/pending_payment_receipt.dart';
 import 'vtop/types/semester.dart';
+import 'vtop/types/student_profile.dart';
 import 'vtop/types/timetable.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
@@ -145,10 +151,94 @@ Future<String> submitHostelOutingForm({
 Future<HostelLeaveData> leaveReport({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientLeaveReport(client: client);
 
+/// Downloads the PDF report for a specific hostel leave request.
+///
+/// Returns the PDF file as a byte vector if successful, or a `VtopError` on failure.
+///
+/// # Examples
+///
+/// ```
+/// let pdf_bytes = leave_report_download(&mut client, "LEAVE123".to_string()).await?;
+/// assert!(!pdf_bytes.is_empty());
+/// ```
 Future<Uint8List> leaveReportDownload({
   required VtopClient client,
   required String leaveId,
 }) => RustLib.instance.api.crateApiVtopGetClientLeaveReportDownload(
   client: client,
   leaveId: leaveId,
+);
+
+/// Retrieves the complete student profile for the authenticated user.
+///
+/// Returns a `StudentProfile` containing detailed profile information on success, or a `VtopError` if the operation fails.
+///
+/// # Examples
+///
+/// ```
+/// let mut client = get_vtop_client("username".to_string(), "password".to_string());
+/// let profile = student_profile(&mut client).await.unwrap();
+/// assert_eq!(profile.name, "John Doe");
+/// ```
+Future<StudentProfile> fetchStudentProfile({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchStudentProfile(
+      client: client,
+    );
+
+/// Retrieves the student's overall grade history and detailed course-wise grade records.
+///
+/// Returns a tuple containing the student's grade history summary and a list of individual course grade histories.
+///
+/// # Examples
+///
+/// ```
+/// let (grade_history, course_histories) = student_grade_history(&mut client).await.unwrap();
+/// assert!(!course_histories.is_empty());
+/// ```
+Future<(GradeHistory, List<GradeCourseHistory>)> fetchGradeHistory({
+  required VtopClient client,
+}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchGradeHistory(client: client);
+
+/// Retrieves a list of pending payments for the student.
+///
+/// Returns a vector of `PendingPaymentReceipt` records on success, or a `VtopError` if the operation fails.
+///
+/// # Examples
+///
+/// ```
+/// let payments = student_pending_payments(&mut client).await?;
+/// assert!(!payments.is_empty() || payments.is_empty());
+/// ```
+Future<List<PendingPaymentReceipt>> fetchPendingPayments({
+  required VtopClient client,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchPendingPayments(
+  client: client,
+);
+
+/// Retrieves the student's payment receipt records.
+///
+/// Returns a vector of `PaidPaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
+///
+/// # Examples
+///
+/// ```
+/// let receipts = student_payment_receipts(&mut client).await?;
+/// assert!(!receipts.is_empty());
+/// ```
+Future<List<PaidPaymentReceipt>> fetchPaymentReceipts({
+  required VtopClient client,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchPaymentReceipts(
+  client: client,
+);
+
+/// Downloads a specific payment receipt as a PDF file.
+Future<String> studentPaymentReceiptDownload({
+  required VtopClient client,
+  required String receiptNo,
+  required String applno,
+}) => RustLib.instance.api.crateApiVtopGetClientStudentPaymentReceiptDownload(
+  client: client,
+  receiptNo: receiptNo,
+  applno: applno,
 );
