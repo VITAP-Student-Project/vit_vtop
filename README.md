@@ -15,7 +15,6 @@
     <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
     </a>
-    <img src="https://img.shields.io/badge/Version-0.0.1-blue.svg" alt="Version 0.0.1">
     <a href="https://github.com/VITAP-Student-Project/vit_vtop/issues">
     <img src="https://img.shields.io/github/issues/VITAP-Student-Project/vit_vtop" alt="GitHub Issues">
     </a>
