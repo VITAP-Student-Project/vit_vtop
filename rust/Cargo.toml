@@ -1,8 +1,8 @@
 [package]
 name = "lib_vtop"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
-description = "A minimal libre package for VTOP "
+description = "A minimal libre package for scraping VTOP "
 license = "Apache-2.0"
 repository = "https://github.com/VITAP-Student-Project/lib_vtop"
 homepage = "https://github.com/VITAP-Student-Project/lib_vtop"
