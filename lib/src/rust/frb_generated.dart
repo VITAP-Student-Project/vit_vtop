@@ -7661,12 +7661,14 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   Future<VtopResultSemesterData> getSemesters() => RustLib.instance.api
       .crateApiVtopVtopClientVtopClientGetSemesters(that: this);
 
-  /// Retrieves the full student profile for the authenticated user.
+  /// Retrieves the full student profile for the authenticated user, including grade history.
   ///
-  /// Sends a POST request to the VTOP student profile endpoint using the current session's CSRF token and authorized ID. Returns the parsed student profile data on success, or a session/network error if authentication fails or the server is unreachable.
+  /// Sends a POST request to the VTOP student profile endpoint using the current session's CSRF token and authorized ID,
+  /// then fetches the grade history and combines them into a complete student profile. Returns the parsed student profile
+  /// data with grade history on success, or a session/network error if authentication fails or the server is unreachable.
   ///
   /// # Returns
-  /// The student's complete profile information as a `StudentProfile` object.
+  /// The student's complete profile information as a `StudentProfile` object with grade history included.
   ///
   /// # Errors
   /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, or `VtopError::NetworkError`/`VtopError::VtopServerError` on network or server failure.
@@ -7675,7 +7677,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   ///
   /// ```
   /// let profile = client.get_student_profile().await?;
-  /// println!("Student name: {}", profile.name);
+  /// println!("Student name: {}", profile.student_name);
+  /// println!("CGPA: {}", profile.grade_history.cgpa);
   /// ```
   Future<VtopResultStudentProfile> getStudentProfile() => RustLib.instance.api
       .crateApiVtopVtopClientVtopClientGetStudentProfile(that: this);
