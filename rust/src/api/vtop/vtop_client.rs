@@ -387,7 +387,7 @@ impl VtopClient {
         }
         let url = format!("{}/vtop/hostel/StudentWeekendOuting", self.config.base_url);
         let body = format!(
-            "_csrf={}&authorizedID={}",
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,

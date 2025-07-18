@@ -109,7 +109,7 @@ pub async fn fetch_faculty_data(
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_hostel_report(client: &mut VtopClient) -> Result<HostelOutingData, VtopError> {
+pub async fn student_outing_report(client: &mut VtopClient) -> Result<HostelOutingData, VtopError> {
     client.get_hostel_report().await
 }
 
