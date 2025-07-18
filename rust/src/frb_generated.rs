@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -275260985;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 254275630;
 
 // Section: executor
 
@@ -2545,66 +2545,6 @@ fn wire__crate__api__vtop_get_client__fetch_hostel_outing_impl(
         },
     )
 }
-fn wire__crate__api__vtop_get_client__fetch_hostel_report_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "fetch_hostel_report",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_client = <RustOpaqueMoi<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>,
-            >>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, crate::api::vtop::vtop_errors::VtopError>(
-                    (move || async move {
-                        let mut api_client_guard = None;
-                        let decode_indices_ =
-                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
-                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                    &api_client,
-                                    0,
-                                    true,
-                                )],
-                            );
-                        for i in decode_indices_ {
-                            match i {
-                                0 => {
-                                    api_client_guard =
-                                        Some(api_client.lockable_decode_async_ref_mut().await)
-                                }
-                                _ => unreachable!(),
-                            }
-                        }
-                        let mut api_client_guard = api_client_guard.unwrap();
-                        let output_ok = crate::api::vtop_get_client::fetch_hostel_report(
-                            &mut *api_client_guard,
-                        )
-                        .await?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
-}
 fn wire__crate__api__vtop_get_client__fetch_is_auth_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -3821,6 +3761,66 @@ fn wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
                     )?;
                     Ok(output_ok)
                 })())
+            }
+        },
+    )
+}
+fn wire__crate__api__vtop_get_client__student_outing_report_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "student_outing_report",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_client = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, crate::api::vtop::vtop_errors::VtopError>(
+                    (move || async move {
+                        let mut api_client_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_client,
+                                    0,
+                                    true,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_client_guard =
+                                        Some(api_client.lockable_decode_async_ref_mut().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let mut api_client_guard = api_client_guard.unwrap();
+                        let output_ok = crate::api::vtop_get_client::student_outing_report(
+                            &mut *api_client_guard,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -5828,144 +5828,144 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        44 => wire__crate__api__vtop_get_client__fetch_hostel_report_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        45 => {
+        44 => {
             wire__crate__api__vtop_get_client__fetch_is_auth_impl(port, ptr, rust_vec_len, data_len)
         }
-        46 => {
+        45 => {
             wire__crate__api__vtop_get_client__fetch_marks_impl(port, ptr, rust_vec_len, data_len)
         }
-        47 => wire__crate__api__vtop_get_client__fetch_payment_receipts_impl(
+        46 => wire__crate__api__vtop_get_client__fetch_payment_receipts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        48 => wire__crate__api__vtop_get_client__fetch_pending_payments_impl(
+        47 => wire__crate__api__vtop_get_client__fetch_pending_payments_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        49 => wire__crate__api__vtop_get_client__fetch_semesters_impl(
+        48 => wire__crate__api__vtop_get_client__fetch_semesters_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        50 => wire__crate__api__vtop_get_client__fetch_student_profile_impl(
+        49 => wire__crate__api__vtop_get_client__fetch_student_profile_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        51 => wire__crate__api__vtop_get_client__fetch_timetable_impl(
+        50 => wire__crate__api__vtop_get_client__fetch_timetable_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        52 => wire__crate__api__vtop_get_client__fetch_wifi_impl(port, ptr, rust_vec_len, data_len),
-        55 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
-        56 => {
+        51 => wire__crate__api__vtop_get_client__fetch_wifi_impl(port, ptr, rust_vec_len, data_len),
+        54 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
+        55 => {
             wire__crate__api__vtop_get_client__leave_report_impl(port, ptr, rust_vec_len, data_len)
         }
-        57 => wire__crate__api__vtop_get_client__leave_report_download_impl(
+        56 => wire__crate__api__vtop_get_client__leave_report_download_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        58 => wire__crate__api__vtop__parser__parseattn__parse_attendance_impl(
+        57 => wire__crate__api__vtop__parser__parseattn__parse_attendance_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        59 => wire__crate__api__vtop__parser__parsebiometric__parse_biometric_data_impl(
+        58 => wire__crate__api__vtop__parser__parsebiometric__parse_biometric_data_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        60 => wire__crate__api__vtop__parser__faculty__parseabout__parse_faculty_data_impl(
+        59 => wire__crate__api__vtop__parser__faculty__parseabout__parse_faculty_data_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        61 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_faculty_search_impl(
+        60 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_faculty_search_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        62 => wire__crate__api__vtop__parser__parseattn__parse_full_attendance_impl(
+        61 => wire__crate__api__vtop__parser__parseattn__parse_full_attendance_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        63 => wire__crate__api__vtop__parser__parsegradehistory__parse_grade_history_impl(
+        62 => wire__crate__api__vtop__parser__parsegradehistory__parse_grade_history_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        64 => wire__crate__api__vtop__parser__hostel__parseleave__parse_hostel_leave_impl(
+        63 => wire__crate__api__vtop__parser__hostel__parseleave__parse_hostel_leave_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        65 => wire__crate__api__vtop__parser__hostel__parseoutings__parse_hostel_outing_impl(
+        64 => wire__crate__api__vtop__parser__hostel__parseoutings__parse_hostel_outing_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        66 => wire__crate__api__vtop__parser__parsemarks__parse_marks_impl(
+        65 => wire__crate__api__vtop__parser__parsemarks__parse_marks_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        67 => wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_impl(
+        66 => wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        68 => wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_impl(
+        67 => wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        69 => wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
+        68 => wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        70 => wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
+        69 => wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        71 => wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
+        70 => wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        72 => wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
+        71 => wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        72 => wire__crate__api__vtop_get_client__student_outing_report_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6013,8 +6013,8 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        53 => wire__crate__api__vtop_get_client__get_vtop_client_impl(ptr, rust_vec_len, data_len),
-        54 => wire__crate__api__simple__greet_impl(ptr, rust_vec_len, data_len),
+        52 => wire__crate__api__vtop_get_client__get_vtop_client_impl(ptr, rust_vec_len, data_len),
+        53 => wire__crate__api__simple__greet_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

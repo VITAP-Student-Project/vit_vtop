@@ -122,8 +122,10 @@ Future<FacultyDetails> fetchFacultyData({
   empId: empId,
 );
 
-Future<HostelOutingData> fetchHostelReport({required VtopClient client}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchHostelReport(client: client);
+Future<HostelOutingData> studentOutingReport({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientStudentOutingReport(
+      client: client,
+    );
 
 Future<Uint8List> fetchHostelOuting({
   required VtopClient client,
